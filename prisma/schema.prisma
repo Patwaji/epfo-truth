@@ -1,7 +1,6 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
+// Simulated EPFO records. Every row here is synthetic: no real UAN, name,
+// bank account or claim ID exists in this database, and nothing in this app
+// ever contacts a government system.
 
 generator client {
   provider = "prisma-client"
@@ -10,4 +9,76 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+}
+
+model Member {
+  uan                     String  @id
+  demoLabel               String
+  nameOnEpfo              String
+  nameOnAadhaar           String
+  nameOnBank              String
+  dobOnEpfo               String
+  dobOnAadhaar            String
+  bankNpciVerified        Boolean
+  chequeUploadLegible     Boolean
+  epsFlaggedButIneligible Boolean
+  otherUans               String[]
+
+  accounts Account[]
+  claims   Claim[]
+}
+
+model Account {
+  memberId         String  @id
+  uan              String
+  employer         String
+  joinedOn         String
+  exitedOn         String?
+  dateOfExitMarked Boolean
+  epfBalancePaise  Int
+  epsBalancePaise  Int
+  transferredOut   Boolean
+
+  member Member @relation(fields: [uan], references: [uan], onDelete: Cascade)
+
+  @@index([uan])
+}
+
+model Claim {
+  id            String  @id
+  uan           String
+  memberId      String
+  type          String
+  filedAt       String
+  amountPaise   Int
+  rejectionCode String?
+
+  // Each system of record, stored as it was observed. reconcile() is the only
+  // thing that decides what these mean together.
+  portalHistory Json
+  passbook      Json?
+  bank          Json?
+
+  /// Demo clock. The judge controls page moves this, not the real date.
+  simulatedToday String
+
+  member     Member      @relation(fields: [uan], references: [uan], onDelete: Cascade)
+  grievances Grievance[]
+
+  @@index([uan])
+}
+
+model Grievance {
+  id          String  @id @default(cuid())
+  claimId     String
+  channel     String
+  filedAt     String
+  docket      String?
+  closedAt    String?
+  closureText String?
+  resolved    Boolean @default(false)
+
+  claim Claim @relation(fields: [claimId], references: [id], onDelete: Cascade)
+
+  @@index([claimId])
 }
