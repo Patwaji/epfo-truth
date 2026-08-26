@@ -1,26 +1,206 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* ---------------------------------------------------------------------------
+   EPFO Truth Layer — design tokens
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+   The subject is a provident fund ledger: money, dates, and a paper trail. So
+   the palette is ledger ink on a warm off-white, with EPFO's own institutional
+   green as the one structural accent, and amber reserved for a single job —
+   showing that EPFO is past its own deadline.
+
+   Deliberately NOT used, because they are the machine-made defaults:
+   purple or blue-to-purple gradients, glows, gradient-filled text, pill badges,
+   icon-in-a-tile, hover lift on cards, faint graph-paper grids.
+
+   Colour carries meaning here and nothing else:
+     green  = structure and affirmation
+     amber  = overdue, and only overdue
+     crit   = the systems disagree, or the claim was rejected
+
+   Three theme states are handled, not two. An explicit choice stamps
+   data-theme on <html>; the default "system" setting stamps nothing at all,
+   which is what most people are in.
+--------------------------------------------------------------------------- */
+
+:root {
+  /* Ink */
+  --ink: #1a1613;
+  --ink-2: #57504a;
+  --ink-3: #857c73;
+
+  /* Ground */
+  --paper: #f7f5f2;
+  --raised: #ffffff;
+
+  /* Edges: a self-coloured hairline, not a drawn contrasting line. */
+  --line: rgba(26, 22, 19, 0.13);
+  --line-soft: rgba(26, 22, 19, 0.07);
+
+  /* Meaning */
+  --green: #145a4e;
+  --green-soft: rgba(20, 90, 78, 0.09);
+  --amber: #a55f14;
+  --amber-soft: rgba(165, 95, 20, 0.10);
+  --crit: #8f2b1e;
+  --crit-soft: rgba(143, 43, 30, 0.09);
+
+  /* Aliases used by components written before these names settled. */
+  --paper-raised: var(--raised);
+  --ink-soft: var(--ink-2);
+  --overdue: var(--amber);
+
+  /* Type */
+  --font-body: var(--font-public-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-source-serif), Georgia, "Times New Roman", serif;
+
+  /* Measure and rhythm */
+  --measure: 68ch;
+  --gap: clamp(1rem, 2.5vw, 1.75rem);
+  --pad-page: clamp(1.25rem, 4vw, 3rem);
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  :root:not([data-theme="light"]) {
+    --ink: #efe9e1;
+    --ink-2: #b3aaa0;
+    --ink-3: #8b8279;
+    --paper: #14110f;
+    --raised: #1c1815;
+    --line: rgba(239, 233, 225, 0.16);
+    --line-soft: rgba(239, 233, 225, 0.08);
+    --green: #6fbfae;
+    --green-soft: rgba(111, 191, 174, 0.12);
+    --amber: #e0954a;
+    --amber-soft: rgba(224, 149, 74, 0.14);
+    --crit: #e08172;
+    --crit-soft: rgba(224, 129, 114, 0.13);
   }
 }
 
+:root[data-theme="dark"] {
+  --ink: #efe9e1;
+  --ink-2: #b3aaa0;
+  --ink-3: #8b8279;
+  --paper: #14110f;
+  --raised: #1c1815;
+  --line: rgba(239, 233, 225, 0.16);
+  --line-soft: rgba(239, 233, 225, 0.08);
+  --green: #6fbfae;
+  --green-soft: rgba(111, 191, 174, 0.12);
+  --amber: #e0954a;
+  --amber-soft: rgba(224, 149, 74, 0.14);
+  --crit: #e08172;
+  --crit-soft: rgba(224, 129, 114, 0.13);
+}
+
+/* --------------------------------------------------------------------------- */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  /* Never let a long claim ID or member ID push the page sideways. */
+  overflow-x: hidden;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  /* Explicit, because the page composites over a ground we do not control. */
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.62;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.011em;
+  line-height: 1.18;
+  text-wrap: balance;
+  margin: 0;
+}
+
+h1 {
+  font-size: clamp(1.9rem, 4.5vw, 2.9rem);
+}
+h2 {
+  font-size: clamp(1.45rem, 3vw, 2rem);
+}
+h3 {
+  font-size: 1.18rem;
+}
+
+p {
+  margin: 0 0 1.05em;
+  max-width: var(--measure);
+}
+
+a {
+  color: inherit;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--ink-3);
+}
+
+a:hover {
+  text-decoration-color: currentColor;
+}
+
+/* Every interactive thing must show where the keyboard is. */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 3px;
+  border-radius: 1px;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+/* Money, dates and day counts sit in columns and must line up. */
+.num,
+time,
+td.num {
+  font-variant-numeric: tabular-nums;
+}
+
+/* An eyebrow above a section heading. One treatment, used for one role. */
+.kicker {
+  font-size: 0.76rem;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--green);
+}
+
+.page {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: clamp(2rem, 5vw, 3.5rem) var(--pad-page);
+}
+
+/* Wide content scrolls inside its own box, never the document. */
+.scroll-x {
+  overflow-x: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
