@@ -1,5 +1,6 @@
 // src/app/claim/[id]/page.tsx
 
+import { headers } from 'next/headers'
 import { notFound } from 'next/navigation'
 import { TruthCard } from '@/components/TruthCard'
 import { SourceDiff } from '@/components/SourceDiff'
@@ -9,17 +10,16 @@ import { ClaimTimeline } from '@/components/ClaimTimeline'
 
 async function getClaim(id: string) {
   try {
-    // `||` binds tighter than `?:`, so writing this as
-    // `A || B ? https://B : localhost` made the ternary test (A || B) and then
-    // always build the URL from VERCEL_URL — which is undefined off Vercel, so
-    // every claim page fetched https://undefined and 404'd.
-    const base =
-      process.env.NEXT_PUBLIC_BASE_URL ??
-      (process.env.VERCEL_URL
-        ? `https://${process.env.VERCEL_URL}`
-        : 'http://localhost:3000')
+    // Derive the origin from the incoming request rather than an environment
+    // variable. NEXT_PUBLIC_BASE_URL is baked in at build time, so a value of
+    // http://localhost:3000 follows the build into production and every claim
+    // page fetches a machine that is not there. The request host is always
+    // correct, locally and on Vercel, with nothing to configure.
+    const h = await headers()
+    const host = h.get('x-forwarded-host') ?? h.get('host') ?? 'localhost:3000'
+    const proto = h.get('x-forwarded-proto') ?? (host.startsWith('localhost') ? 'http' : 'https')
 
-    const res = await fetch(`${base}/api/claims/${id}`, { cache: 'no-store' })
+    const res = await fetch(`${proto}://${host}/api/claims/${id}`, { cache: 'no-store' })
     if (!res.ok) return null
     return await res.json()
   } catch (error) {
