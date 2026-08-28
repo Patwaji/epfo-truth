@@ -5,6 +5,7 @@ import { reconcile } from '@/lib/domain/reconcile'
 import { slaClock } from '@/lib/domain/sla'
 import { detectBlocker } from '@/lib/domain/blockers'
 import { nextAction } from '@/lib/domain/nextAction'
+import { nextRung, draftFor } from '@/lib/domain/escalation'
 import { findStranded, strandedTotalPaise } from '@/lib/domain/stranded'
 
 /**
@@ -40,13 +41,19 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
   const sla = slaClock(claim.filedAt, today)
   const blocker = detectBlocker(profile, claim, truth)
 
-  // Task 6 (escalation ladder) is not in the tree yet. Until it lands, the
-  // route reports the grievances already filed and leaves the next rung and
-  // its drafted letter null. Wiring it back up is two lines here:
-  //   const rung = nextRung(sla, claim.grievances)
-  //   const draft = draftFor(rung, { ...ctx })
-  const rung = 'WAIT' as const
-  const draft = null
+  const rung = nextRung(sla, claim.grievances, today)
+  const draft = draftFor(rung, {
+    uan: profile.uan,
+    claimId: claim.id,
+    claimType: claim.type,
+    filedAt: claim.filedAt,
+    amountPaise: claim.amountPaise,
+    daysElapsed: sla.daysElapsed,
+    today,
+    priorDockets: claim.grievances
+      .map((g) => g.docket)
+      .filter((d): d is string => typeof d === 'string'),
+  })
 
   const action = nextAction({ truth, blocker, sla, rung, claimId: claim.id })
 
