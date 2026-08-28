@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/db/client'
+import { requireDemoSession } from '@/lib/demoSession'
 import type { Rung } from '@/lib/domain/types'
 
 // Reference formats used by the real portals, so a filed grievance looks like
@@ -21,6 +22,13 @@ function docketFor(channel: Exclude<Rung, 'WAIT'>): string {
 
 /** File the next escalation. Simulated: nothing leaves this machine. */
 export async function POST(req: Request) {
+  if (!(await requireDemoSession())) {
+    return NextResponse.json(
+      { error: 'Sign in first to file an escalation in this demo.' },
+      { status: 401 },
+    )
+  }
+
   let body: { claimId?: unknown; channel?: unknown }
 
   try {

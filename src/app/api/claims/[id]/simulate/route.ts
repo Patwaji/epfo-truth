@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/db/client'
+import { requireDemoSession } from '@/lib/demoSession'
 
 const MS_PER_DAY = 86_400_000
 
@@ -11,6 +12,13 @@ const MS_PER_DAY = 86_400_000
  */
 export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
+
+  if (!(await requireDemoSession())) {
+    return NextResponse.json(
+      { error: 'Sign in as one of the demo people first, then use these controls.' },
+      { status: 401 },
+    )
+  }
 
   let body: { advanceDays?: unknown; creditNow?: unknown; reset?: unknown }
 

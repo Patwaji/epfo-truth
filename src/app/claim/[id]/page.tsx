@@ -1,32 +1,14 @@
 // src/app/claim/[id]/page.tsx
 
-import { headers } from 'next/headers'
 import { notFound } from 'next/navigation'
+import { getClaimView } from '@/lib/claimView'
 import { TruthCard } from '@/components/TruthCard'
 import { SourceDiff } from '@/components/SourceDiff'
 import { BlockerPanel } from '@/components/BlockerPanel'
 import { EscalationLadder } from '@/components/EscalationLadder'
 import { ClaimTimeline } from '@/components/ClaimTimeline'
+import { ReadAloud } from '@/components/ReadAloud'
 
-async function getClaim(id: string) {
-  try {
-    // Derive the origin from the incoming request rather than an environment
-    // variable. NEXT_PUBLIC_BASE_URL is baked in at build time, so a value of
-    // http://localhost:3000 follows the build into production and every claim
-    // page fetches a machine that is not there. The request host is always
-    // correct, locally and on Vercel, with nothing to configure.
-    const h = await headers()
-    const host = h.get('x-forwarded-host') ?? h.get('host') ?? 'localhost:3000'
-    const proto = h.get('x-forwarded-proto') ?? (host.startsWith('localhost') ? 'http' : 'https')
-
-    const res = await fetch(`${proto}://${host}/api/claims/${id}`, { cache: 'no-store' })
-    if (!res.ok) return null
-    return await res.json()
-  } catch (error) {
-    console.error(`Failed to fetch claim record for ID: ${id}`, error)
-    return null
-  }
-}
 
 export default async function ClaimPage({
   params,
@@ -34,7 +16,7 @@ export default async function ClaimPage({
   params: Promise<{ id: string }>
 }) {
   const { id } = await params
-  const d = await getClaim(id)
+  const d = await getClaimView(id)
 
   if (!d || !d.claim) {
     notFound()
@@ -67,7 +49,7 @@ export default async function ClaimPage({
             <span style={{ fontSize: '0.75rem', padding: '0.2rem 0.5rem', borderRadius: '4px', backgroundColor: '#0f172a', color: '#ffffff', fontWeight: 700 }}>
               EPFO TRUTH LAYER
             </span>
-            <span style={{ fontSize: '0.85rem', color: '#64748b' }}>• Ref: {d.claim.claimId || id}</span>
+            <span style={{ fontSize: '0.85rem', color: '#64748b' }}>• Ref: {d.claim.id}</span>
           </div>
           <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: '#0f172a', marginTop: '0.4rem', margin: 0 }}>
             Claim Audit & Escalation Portal
@@ -90,6 +72,12 @@ export default async function ClaimPage({
           action={d.action}
           amountPaise={d.claim.amountPaise}
         />
+
+        <div style={{ marginTop: '-0.5rem' }}>
+          <ReadAloud
+            text={`${d.action.headline}. ${d.action.detail} ${d.blocker.title}. ${d.blocker.because}`}
+          />
+        </div>
 
         <SourceDiff claim={d.claim} truth={d.truth} today={d.today} />
 

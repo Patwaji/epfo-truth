@@ -110,7 +110,17 @@ export default function Demo() {
         body: JSON.stringify({ advanceDays: days, creditNow }),
       })
       const json = await res.json()
-      
+
+      if (!res.ok) {
+        setLog(prev => [{
+          id: Math.random().toString(36).slice(2, 11),
+          text: json.error ?? 'That did not work.',
+          time: new Date().toLocaleTimeString('en-US', { hour12: false }),
+          type: 'advance',
+        }, ...prev])
+        return
+      }
+
       const timeString = new Date().toLocaleTimeString('en-US', { 
         hour12: false, 
         hour: '2-digit', 
@@ -147,6 +157,12 @@ export default function Demo() {
         Not part of the public citizen interface. This panel allows evaluators to simulate 
         time acceleration, trigger SLA clock breaches, and inspect real-time escalation logic 
         without waiting 50 days.
+      </p>
+
+      <p style={{ fontSize: '0.9rem', color: '#475569', marginBottom: '2rem' }}>
+        These controls write shared state, so they need a session.{' '}
+        <a href="/" style={{ color: '#1e40af' }}>Sign in as one of the three people</a>{' '}
+        first, then come back.
       </p>
 
       {/* Control Cards */}
