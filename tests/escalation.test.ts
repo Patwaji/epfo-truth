@@ -153,3 +153,23 @@ describe('draftFor', () => {
     expect(draftFor('CPGRAMS', ctx).body).toContain('Form 31')
   })
 })
+
+describe('nextRung on a rejected claim', () => {
+  // A rejected claim is not "pending". Escalating it spends the one grievance
+  // the member gets and will be closed immediately, while the thing that
+  // actually blocks them (a name mismatch, a bad cheque scan) goes unfixed.
+  it('never escalates a rejected claim, however overdue it looks', () => {
+    expect(nextRung(breached, [], ctx.today, { rejected: true })).toBe('WAIT')
+  })
+
+  it('still escalates a rejected-looking claim when it is not actually rejected', () => {
+    expect(nextRung(breached, [], ctx.today, { rejected: false })).toBe('EPFIGMS')
+  })
+
+  it('tells a rejected member to fix and re-file rather than to wait it out', () => {
+    const d = draftFor('WAIT', { ...ctx, rejected: true })
+    expect(d.body).toMatch(/reject/i)
+    expect(d.body).toMatch(/file it again|re-file|fix/i)
+    expect(d.body).not.toMatch(/still inside the stated processing window/i)
+  })
+})

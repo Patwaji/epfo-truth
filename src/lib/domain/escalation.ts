@@ -24,6 +24,8 @@ export interface DraftContext {
   /** The simulated date, so drafts never quote the real wall clock. */
   today: string
   priorDockets: string[]
+  /** True when the claim was rejected, which changes what waiting means. */
+  rejected?: boolean
 }
 
 const MS_PER_DAY = 86_400_000
@@ -64,7 +66,18 @@ function stalled(g: GrievanceRecord, rung: Rung, today: string): boolean {
  * grievance gets a template reply, and on EPFiGMS that closure can lock the
  * member out of filing another one for thirty days.
  */
-export function nextRung(sla: SlaResult, history: GrievanceRecord[], today: string): Rung {
+export function nextRung(
+  sla: SlaResult,
+  history: GrievanceRecord[],
+  today: string,
+  opts: { rejected?: boolean } = {},
+): Rung {
+  // A rejected claim is not pending, it is finished. Escalating it spends the
+  // one grievance the member gets, gets closed the same day, and leaves the
+  // thing that actually blocked them unfixed. They have to correct it and file
+  // again; no rung on this ladder can help.
+  if (opts.rejected) return 'WAIT'
+
   // Something in the chain worked. Do not keep climbing.
   if (history.some((g) => g.resolved)) return 'WAIT'
 
@@ -129,6 +142,19 @@ export function draftFor(rung: Rung, ctx: DraftContext): Draft {
 
   switch (rung) {
     case 'WAIT':
+      if (ctx.rejected) {
+        return {
+          channel: 'WAIT',
+          where: 'Escalation will not help this claim',
+          subject: '',
+          body:
+            'This claim was rejected, so it is no longer pending and there is ' +
+            'nothing for a grievance to chase. Filing one now will be closed the ' +
+            'same day and may stop you raising a fresh grievance for 30 days.\n\n' +
+            'Fix the problem named above, then file it again. Escalation only ' +
+            'applies to a claim that EPFO is sitting on.',
+        }
+      }
       return {
         channel: 'WAIT',
         where: 'No action needed yet',

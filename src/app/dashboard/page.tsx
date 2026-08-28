@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { SignOut } from '@/components/SignOut'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { prisma } from '@/lib/db/client'
@@ -47,7 +48,10 @@ export default async function Dashboard() {
           </div>
         </div>
         <div style={styles.headerRight}>
-          <span style={styles.statusChip}>KYC Verified</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+            <span style={styles.statusChip}>KYC Verified</span>
+            <SignOut />
+          </div>
         </div>
       </header>
 

@@ -41,7 +41,8 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
   const sla = slaClock(claim.filedAt, today)
   const blocker = detectBlocker(profile, claim, truth)
 
-  const rung = nextRung(sla, claim.grievances, today)
+  const rejected = truth.code === 'REJECTED'
+  const rung = nextRung(sla, claim.grievances, today, { rejected })
   const draft = draftFor(rung, {
     uan: profile.uan,
     claimId: claim.id,
@@ -50,6 +51,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     amountPaise: claim.amountPaise,
     daysElapsed: sla.daysElapsed,
     today,
+    rejected,
     priorDockets: claim.grievances
       .map((g) => g.docket)
       .filter((d): d is string => typeof d === 'string'),
