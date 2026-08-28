@@ -232,68 +232,52 @@ td.num {
 }
 
 /* ---------------------------------------------------------------------------
-   NeoPOP layer
+   NeoPOP
 
-   Direction taken from what Indian money apps actually ship for a young
-   audience: CRED and Zerodha both render every button and card at zero radius,
-   with hard edges and flat blocks of colour. No soft shadows, no rounded
-   pills, no glow. Depth comes from a hard offset shadow, the way a printed
-   card sits on a surface.
+   Direction from what Indian money apps actually ship for a young audience:
+   CRED and Zerodha both render every control at zero radius, with hard edges
+   and flat blocks of colour. Depth comes from a hard offset shadow, like a
+   printed card on a surface, never from soft blur.
 
-   Applied as a layer over the existing components so the whole app changes
-   language at once, rather than editing 250 inline styles by hand with an
-   hour on the clock.
+   Scoped to explicit classes. An earlier version applied this with blanket
+   selectors and turned every section on the page into a bordered box, which is
+   how the hero ended up as one giant frame with dead space beside it.
 --------------------------------------------------------------------------- */
 
 :root {
   --pop-edge: 2px;
-  --pop-shadow: 5px 5px 0 var(--ink);
-  --pop-shadow-sm: 3px 3px 0 var(--ink);
+
+  /* The hero is a dark surface in both themes, so it cannot use --ink, which
+     flips to cream in dark mode and paints light text on a light ground. */
+  --hero-bg: #14110f;
+  --hero-fg: #f7f5f2;
+  --hero-dim: rgba(247, 245, 242, 0.62);
+  --hero-rail: rgba(247, 245, 242, 0.26);
+  --ink-invert: var(--hero-fg);
 }
 
-/* Nothing is rounded. This single rule does most of the work. */
-main *,
-footer *,
-main,
-button,
-input,
-a,
-section,
-article,
-figure {
-  border-radius: 0 !important;
+/* The signal colour. Hotter than the document amber because it sits on ink. */
+:root { --signal: #ff8a3d; }
+
+.pop {
+  border: var(--pop-edge) solid var(--ink);
+  border-radius: 0;
+  background: var(--paper-raised);
+  box-shadow: 6px 6px 0 var(--ink);
 }
 
-/* Cards and panels sit on the page as physical objects. */
-main section,
-main article,
-main form {
-  box-shadow: var(--pop-shadow);
-  border: var(--pop-edge) solid var(--ink) !important;
-}
+.pop-tight { box-shadow: 4px 4px 0 var(--ink); }
 
-/* Controls get the same treatment, and press in rather than lifting. */
-main button,
-main a[href] > article,
-footer button {
-  border: var(--pop-edge) solid var(--ink) !important;
-  box-shadow: var(--pop-shadow-sm);
+.pop-press {
+  border: var(--pop-edge) solid var(--ink);
+  border-radius: 0;
+  box-shadow: 4px 4px 0 var(--ink);
   transition: transform 0.06s steps(1), box-shadow 0.06s steps(1);
 }
+.pop-press:active { transform: translate(4px, 4px); box-shadow: none; }
 
-main button:active,
-footer button:active {
-  transform: translate(3px, 3px);
-  box-shadow: none;
-}
+/* Inside the dark hero the edges have to be light to be seen at all. */
+.on-ink .pop,
+.on-ink .pop-press { border-color: var(--hero-fg); box-shadow: 6px 6px 0 var(--signal); }
 
-/* Micro labels are set as hard, tracked capitals. */
-.kicker {
-  letter-spacing: 0.16em;
-}
-
-/* The display face carries the page, so let it get properly large and tight. */
-h1 {
-  letter-spacing: -0.035em;
-  line-height: 1.02;
-}
+.kicker { letter-spacing: 0.16em; }

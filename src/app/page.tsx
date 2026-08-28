@@ -6,82 +6,111 @@ interface DemoUser {
   label: string
   who: string
   tag: string
+  amount: string
+  stat: string
 }
 
 const DEMOS: DemoUser[] = [
   {
     uan: '100000000001',
-    label: 'Money left my PF but never reached my bank',
+    label: 'money left my PF but never reached my bank',
     who: 'Rajesh, 32, Bengaluru',
-    tag: 'Settlement Mismatch',
+    tag: 'Settlement mismatch',
+    amount: '₹1,20,000',
+    stat: '54 days waiting',
   },
   {
     uan: '100000000002',
-    label: 'My claim keeps getting rejected and I do not know why',
+    label: 'my claim keeps getting rejected and nobody says why',
     who: 'Sunita, 37, Delhi',
-    tag: 'Opaque Rejection',
+    tag: 'Opaque rejection',
+    amount: '₹2,15,000',
+    stat: 'rejected, no reason given',
   },
   {
     uan: '100000000003',
     label: 'I changed jobs and my old PF never followed me',
     who: 'Imran, 33, Pune',
-    tag: 'Transfer Stuck',
+    tag: 'Transfer stuck',
+    amount: '₹2,80,000',
+    stat: '₹80,000 stranded',
   },
 ]
 
 export default function Home() {
   return (
-    <main style={styles.container}>
-      <header style={styles.headerBadge}>
-        <span style={styles.liveIndicator} />
-        <span style={styles.badgeText}>EPFO Truth Engine · Public Service Prototype</span>
-      </header>
+    <main>
+      {/* ---- Hero: full bleed ink, the headline and the artifact, nothing else ---- */}
+      <section className="on-ink" style={s.hero}>
+        <div style={s.heroInner}>
+          <p style={s.eyebrow}>EPFO TRUTH ENGINE &middot; INDEPENDENT PROTOTYPE</p>
 
-      <section style={styles.heroSection}>
-        <h1 style={styles.mainHeading}>
-          Your passbook says settled.<br />
-          Your bank says nothing arrived.<br />
-          <span style={styles.highlightText}>Both are EPFO.</span>
-        </h1>
+          <h1 style={s.h1}>
+            your passbook says settled.
+            <br />
+            your bank says nothing arrived.
+            <br />
+            <span style={{ color: 'var(--signal)' }}>both are EPFO.</span>
+          </h1>
 
-        <ReconciliationStrip />
+          <div style={s.stripWrap}>
+            <ReconciliationStrip onInk />
+          </div>
+        </div>
+      </section>
 
-        <p style={styles.description}>
-          Every salaried person in India has a PF account, and almost nobody can tell what is happening
-          to their own money. This is a prototype of what the member portal should do: reconcile every
-          system, name the real blocker in plain language, run a visible clock, and escalate for you
-          when EPFO misses its own deadline.
+      {/* ---- The numbers, stated flat ---- */}
+      <section style={s.stats}>
+        <div style={s.statsInner}>
+          {[
+            ['3', 'systems tracking one claim'],
+            ['20', 'day limit EPFO sets itself'],
+            ['0', 'screens that show all three'],
+          ].map(([n, label]) => (
+            <div key={label} style={s.stat}>
+              <span className="num" style={s.statNum}>{n}</span>
+              <span style={s.statLabel}>{label}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ---- What it does ---- */}
+      <section style={s.body}>
+        <p style={s.lede}>
+          Every salaried person in India has a PF account, and almost nobody can
+          tell what is happening to their own money. This is what the member
+          portal should do: reconcile every system, name the real blocker in
+          plain language, run a visible clock, and escalate for you when EPFO
+          misses its own deadline.
         </p>
       </section>
 
-      <section style={styles.demoSection}>
-        <div style={styles.sectionHeader}>
-          <h2 style={styles.sectionTitle}>Sign in as one of three people</h2>
-          <p style={styles.otpNotice}>
-            Every case below is a real, documented failure. OTP for all of them is{' '}
-            <code style={styles.codeBlock}>123456</code>.
+      {/* ---- Pick a person ---- */}
+      <section style={s.picker}>
+        <div style={s.pickerHead}>
+          <h2 style={s.h2}>pick someone and see it</h2>
+          <p style={s.otp}>
+            Three real, documented failures. OTP for all of them is{' '}
+            <strong style={s.otpCode}>123456</strong>
           </p>
         </div>
 
-        <div style={styles.cardGrid}>
+        <div style={s.grid}>
           {DEMOS.map((d) => (
-            <Link
-              key={d.uan}
-              href={`/login?uan=${d.uan}`}
-              style={styles.cardLink}
-            >
-              <article style={styles.card}>
-                <div style={styles.cardHeader}>
-                  <span style={styles.cardTag}>{d.tag}</span>
-                  <span style={styles.uanText}>UAN: {d.uan}</span>
-                </div>
-                
-                <h3 style={styles.cardLabel}>"{d.label}"</h3>
+            <Link key={d.uan} href={`/login?uan=${d.uan}`} style={s.cardLink}>
+              <article className="pop pop-tight" style={s.card}>
+                <span style={s.tag}>{d.tag}</span>
 
-                <div style={styles.cardFooter}>
-                  <span style={styles.whoText}>{d.who}</span>
-                  <span style={styles.arrowIcon}>→</span>
-                </div>
+                <p style={s.quote}>&ldquo;{d.label}&rdquo;</p>
+
+                <span className="num" style={s.amount}>{d.amount}</span>
+                <span style={s.stat2}>{d.stat}</span>
+
+                <span style={s.cardFoot}>
+                  <span style={s.who}>{d.who}</span>
+                  <span style={s.arrow} aria-hidden="true">&#8594;</span>
+                </span>
               </article>
             </Link>
           ))}
@@ -91,146 +120,126 @@ export default function Home() {
   )
 }
 
-const styles: Record<string, React.CSSProperties> = {
-  container: {
-    maxWidth: '1040px',
-    margin: '0 auto',
-    padding: 'clamp(2rem, 6vw, 4.5rem) 1.5rem 5rem 1.5rem',
-    fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-    color: 'var(--ink)',
+const s: Record<string, React.CSSProperties> = {
+  hero: {
+    background: 'var(--hero-bg)',
+    color: 'var(--hero-fg)',
+    padding: 'clamp(3rem, 9vw, 7rem) var(--pad-page) clamp(3rem, 8vw, 6rem)',
   },
-  headerBadge: {
-    display: 'inline-flex',
-    alignItems: 'center',
-    gap: '0.5rem',
-    padding: '0.4rem 0.85rem',
-    backgroundColor: 'var(--paper)',
-    borderRadius: '9999px',
-    border: '1px solid var(--line)',
-    marginBottom: '2rem',
+  heroInner: { maxWidth: 1140, margin: '0 auto' },
+
+  eyebrow: {
+    fontSize: '0.72rem',
+    letterSpacing: '0.18em',
+    fontWeight: 700,
+    color: 'var(--signal)',
+    margin: '0 0 clamp(1.5rem, 4vw, 2.5rem)',
   },
-  liveIndicator: {
-    width: '8px',
-    height: '8px',
-    borderRadius: '50%',
-    backgroundColor: 'var(--crit)',
-  },
-  badgeText: {
-    fontSize: '0.825rem',
-    fontWeight: 600,
-    color: 'var(--ink-2)',
-    letterSpacing: '0.02em',
-  },
-  heroSection: {
-    marginBottom: '3.5rem',
-  },
-  mainHeading: {
-    fontSize: 'clamp(2.1rem, 5.6vw, 3.7rem)',
-    lineHeight: 1.06,
-    fontWeight: 800,
-    letterSpacing: '-0.03em',
-    color: 'var(--ink)',
+
+  h1: {
+    fontFamily: 'var(--font-display)',
+    fontSize: 'clamp(1.95rem, 4.3vw, 3.6rem)',
+    lineHeight: 0.98,
+    letterSpacing: '-0.04em',
+    fontWeight: 700,
+    color: 'var(--hero-fg)',
     margin: 0,
+    maxWidth: '33ch',
   },
-  highlightText: {
-    color: 'var(--overdue, var(--crit))',
-    display: 'block',
-    marginTop: '0.25rem',
+
+  stripWrap: { marginTop: 'clamp(2.5rem, 6vw, 4.5rem)', maxWidth: 980 },
+
+  stats: {
+    background: 'var(--signal)',
+    color: '#1a1613',
+    padding: 'clamp(1.5rem, 4vw, 2.25rem) var(--pad-page)',
   },
-  description: {
-    marginTop: '1.75rem',
-    maxWidth: '54ch',
-    fontSize: '1.05rem',
+  statsInner: {
+    maxWidth: 1140,
+    margin: '0 auto',
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))',
+    gap: '1.5rem',
+  },
+  stat: { display: 'flex', flexDirection: 'column', gap: '0.15rem' },
+  statNum: {
+    fontFamily: 'var(--font-display)',
+    fontSize: 'clamp(2.2rem, 5vw, 3.2rem)',
+    fontWeight: 700,
+    lineHeight: 1,
+    letterSpacing: '-0.03em',
+  },
+  statLabel: { fontSize: '0.95rem', fontWeight: 600, maxWidth: '20ch', lineHeight: 1.3 },
+
+  body: { padding: 'clamp(3rem, 7vw, 5rem) var(--pad-page) 0', maxWidth: 1140, margin: '0 auto' },
+  lede: {
+    maxWidth: '58ch',
+    margin: 0,
+    fontSize: 'clamp(1.05rem, 1.6vw, 1.25rem)',
     lineHeight: 1.6,
     color: 'var(--ink-2)',
-    fontWeight: 400,
   },
-  demoSection: {
-    borderTop: '2px solid var(--line)',
-    paddingTop: '2.5rem',
-  },
-  sectionHeader: {
-    marginBottom: '1.75rem',
-  },
-  sectionTitle: {
-    fontSize: '1.6rem',
-    fontWeight: 700,
-    color: 'var(--ink)',
+
+  picker: { padding: 'clamp(2.5rem, 6vw, 4rem) var(--pad-page) clamp(3rem, 7vw, 5rem)', maxWidth: 1140, margin: '0 auto' },
+  pickerHead: { marginBottom: 'clamp(1.5rem, 4vw, 2.5rem)' },
+  h2: {
+    fontFamily: 'var(--font-display)',
+    fontSize: 'clamp(1.7rem, 3.6vw, 2.6rem)',
+    letterSpacing: '-0.03em',
     margin: 0,
   },
-  otpNotice: {
-    color: 'var(--ink-3)',
-    marginTop: '0.4rem',
-    fontSize: '0.95rem',
+  otp: { marginTop: '0.6rem', color: 'var(--ink-2)' },
+  otpCode: {
+    fontVariantNumeric: 'tabular-nums',
+    background: 'var(--hero-bg)',
+    color: 'var(--hero-fg)',
+    padding: '0.1rem 0.45rem',
   },
-  codeBlock: {
-    backgroundColor: 'var(--paper)',
-    padding: '0.15rem 0.4rem',
-    borderRadius: '4px',
-    color: 'var(--ink)',
-    fontWeight: 700,
-    fontFamily: 'monospace',
-    border: '1px solid var(--line)',
+
+  grid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(270px, 1fr))',
+    gap: 'clamp(1.25rem, 3vw, 1.75rem)',
   },
-  cardGrid: {
+  cardLink: { textDecoration: 'none', color: 'inherit', display: 'block' },
+  card: {
+    padding: 'clamp(1.4rem, 3vw, 1.9rem)',
     display: 'flex',
     flexDirection: 'column',
-    gap: '1rem',
+    gap: '0.55rem',
+    height: '100%',
   },
-  cardLink: {
-    textDecoration: 'none',
-    color: 'inherit',
-    display: 'block',
-  },
-  card: {
-    backgroundColor: 'var(--paper-raised)',
-    border: '1px solid var(--line)',
-    borderRadius: '12px',
-    padding: '1.6rem 1.75rem',
-    boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
-  },
-  cardHeader: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: '0.75rem',
-  },
-  cardTag: {
-    fontSize: '0.75rem',
-    fontWeight: 700,
-    color: 'var(--green)',
-    backgroundColor: 'var(--green-soft)',
-    padding: '0.2rem 0.6rem',
-    borderRadius: '6px',
+  tag: {
+    fontSize: '0.68rem',
+    letterSpacing: '0.14em',
     textTransform: 'uppercase',
-  },
-  uanText: {
-    fontSize: '0.825rem',
+    fontWeight: 700,
     color: 'var(--ink-3)',
-    fontFamily: 'monospace',
   },
-  cardLabel: {
-    fontSize: '1.32rem',
-    fontWeight: 600,
-    color: 'var(--ink)',
-    margin: '0 0 0.75rem 0',
-    lineHeight: 1.28,
+  quote: {
+    fontFamily: 'var(--font-display)',
+    fontSize: '1.3rem',
+    lineHeight: 1.24,
+    letterSpacing: '-0.015em',
+    margin: '0.2rem 0 0.6rem',
+    minHeight: '3.7em',
   },
-  cardFooter: {
+  amount: {
+    fontFamily: 'var(--font-display)',
+    fontSize: '2rem',
+    fontWeight: 700,
+    lineHeight: 1,
+    letterSpacing: '-0.03em',
+  },
+  stat2: { fontSize: '0.9rem', color: 'var(--signal-ink, var(--amber))', fontWeight: 600 },
+  cardFoot: {
+    marginTop: 'auto',
+    paddingTop: '1.1rem',
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    borderTop: '1px solid var(--paper)',
-    paddingTop: '0.75rem',
+    borderTop: '1px solid var(--line)',
   },
-  whoText: {
-    fontSize: '0.875rem',
-    color: 'var(--ink-2)',
-    fontWeight: 500,
-  },
-  arrowIcon: {
-    fontSize: '1.1rem',
-    color: 'var(--green)',
-    fontWeight: 700,
-  },
+  who: { fontSize: '0.88rem', color: 'var(--ink-3)' },
+  arrow: { fontSize: '1.15rem', color: 'var(--ink)' },
 }

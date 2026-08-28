@@ -9,26 +9,36 @@
  * Pure SVG and CSS, no JavaScript: it renders identically with scripts off, and
  * the motion only moves something already on screen rather than revealing it.
  */
-export function ReconciliationStrip() {
+export function ReconciliationStrip({ onInk = false }: { onInk?: boolean }) {
   return (
-    <figure style={{ margin: 'clamp(2rem, 5vw, 3.25rem) 0 0', maxWidth: 860 }} aria-labelledby="strip-caption">
+    <figure style={{ margin: 0, maxWidth: '100%' }} aria-labelledby="strip-caption">
       <svg
         viewBox="0 0 640 300"
         width="100%"
         height="auto"
         role="img"
         aria-label="One claim across three EPFO systems. The member portal says submitted at portal. The passbook says one lakh twenty thousand rupees was debited. The bank account has received nothing."
-        style={{ display: 'block' }}
+        style={
+          {
+            display: 'block',
+            // One artifact, two grounds. The palette flips with the surface it
+            // is drawn on rather than the page theme.
+            '--rs-fg': onInk ? 'var(--hero-fg)' : 'var(--ink)',
+            '--rs-dim': onInk ? 'var(--hero-dim)' : 'var(--ink-3)',
+            '--rs-rail': onInk ? 'var(--hero-rail)' : 'var(--line)',
+            '--rs-signal': onInk ? 'var(--signal)' : 'var(--amber)',
+          } as React.CSSProperties
+        }
       >
         <defs>
           <style>{`
-            .rs-src   { font: 600 13.5px var(--font-body); fill: var(--ink-3); letter-spacing: .04em; }
-            .rs-val   { font: 700 19px var(--font-body);   fill: var(--ink); }
-            .rs-miss  { font: 700 19px var(--font-body);   fill: var(--crit); }
-            .rs-note  { font: 500 12px var(--font-body);   fill: var(--crit); }
-            .rs-rail  { stroke: var(--line); stroke-width: 1.5; }
-            .rs-path  { stroke: var(--amber); stroke-width: 2; stroke-linecap: round; }
-            .rs-coin  { fill: var(--amber); }
+            .rs-src   { font: 600 13.5px var(--font-body); fill: var(--rs-dim); letter-spacing: .1em; text-transform: uppercase; }
+            .rs-val   { font: 700 21px var(--font-body);   fill: var(--rs-fg); }
+            .rs-miss  { font: 700 21px var(--font-body);   fill: var(--rs-signal); }
+            .rs-note  { font: 600 11.5px var(--font-body); fill: var(--rs-signal); letter-spacing: .08em; text-transform: uppercase; }
+            .rs-rail  { stroke: var(--rs-rail); stroke-width: 1.5; }
+            .rs-path  { stroke: var(--rs-signal); stroke-width: 2.5; stroke-linecap: round; }
+            .rs-coin  { fill: var(--rs-signal); }
 
             @media (prefers-reduced-motion: no-preference) {
               .rs-coin { animation: rs-move 4.6s ease-in-out infinite; }
@@ -73,14 +83,19 @@ export function ReconciliationStrip() {
         {/* The empty slot */}
         <rect
           x="500" y="196" width="140" height="46" rx="2"
-          fill="none" stroke="var(--crit)" strokeWidth="1.5" strokeDasharray="5 4"
+          fill="none" stroke="var(--rs-signal)" strokeWidth="1.5" strokeDasharray="6 5"
         />
         <text className="rs-note" x="570" y="224" textAnchor="middle">never arrived</text>
       </svg>
 
       <figcaption
         id="strip-caption"
-        style={{ marginTop: '1.25rem', color: 'var(--ink-2)', fontSize: '0.95rem', maxWidth: '52ch' }}
+        style={{
+          marginTop: '1.5rem',
+          color: onInk ? 'var(--hero-dim)' : 'var(--ink-2)',
+          fontSize: '1rem',
+          maxWidth: '48ch',
+        }}
       >
         One claim. Three systems that never agree, and never appear on the same
         screen. This is why nobody can tell where their own money is.
