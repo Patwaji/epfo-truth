@@ -1,69 +1,233 @@
-import Image from "next/image";
+import Link from 'next/link'
+
+interface DemoUser {
+  uan: string
+  label: string
+  who: string
+  tag: string
+}
+
+const DEMOS: DemoUser[] = [
+  {
+    uan: '100000000001',
+    label: 'Money left my PF but never reached my bank',
+    who: 'Rajesh, 32, Bengaluru',
+    tag: 'Settlement Mismatch',
+  },
+  {
+    uan: '100000000002',
+    label: 'My claim keeps getting rejected and I do not know why',
+    who: 'Sunita, 37, Delhi',
+    tag: 'Opaque Rejection',
+  },
+  {
+    uan: '100000000003',
+    label: 'I changed jobs and my old PF never followed me',
+    who: 'Imran, 33, Pune',
+    tag: 'Transfer Stuck',
+  },
+]
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <main style={styles.container}>
+      <header style={styles.headerBadge}>
+        <span style={styles.liveIndicator} />
+        <span style={styles.badgeText}>EPFO Truth Engine · Public Service Prototype</span>
+      </header>
+
+      <section style={styles.heroSection}>
+        <h1 style={styles.mainHeading}>
+          Your passbook says settled.<br />
+          Your bank says nothing arrived.<br />
+          <span style={styles.highlightText}>Both are EPFO.</span>
+        </h1>
+
+        <p style={styles.description}>
+          Every salaried person in India has a PF account, and almost nobody can tell what is happening
+          to their own money. This is a prototype of what the member portal should do: reconcile every
+          system, name the real blocker in plain language, run a visible clock, and escalate for you
+          when EPFO misses its own deadline.
+        </p>
+      </section>
+
+      <section style={styles.demoSection}>
+        <div style={styles.sectionHeader}>
+          <h2 style={styles.sectionTitle}>Sign in as one of three people</h2>
+          <p style={styles.otpNotice}>
+            Every case below is a real, documented failure. OTP for all of them is{' '}
+            <code style={styles.codeBlock}>123456</code>.
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        <div style={styles.cardGrid}>
+          {DEMOS.map((d) => (
+            <Link
+              key={d.uan}
+              href={`/login?uan=${d.uan}`}
+              style={styles.cardLink}
+            >
+              <article style={styles.card}>
+                <div style={styles.cardHeader}>
+                  <span style={styles.cardTag}>{d.tag}</span>
+                  <span style={styles.uanText}>UAN: {d.uan}</span>
+                </div>
+                
+                <h3 style={styles.cardLabel}>"{d.label}"</h3>
+
+                <div style={styles.cardFooter}>
+                  <span style={styles.whoText}>{d.who}</span>
+                  <span style={styles.arrowIcon}>→</span>
+                </div>
+              </article>
+            </Link>
+          ))}
         </div>
-      </main>
-    </div>
-  );
+      </section>
+    </main>
+  )
+}
+
+const styles: Record<string, React.CSSProperties> = {
+  container: {
+    maxWidth: '920px',
+    margin: '0 auto',
+    padding: '3rem 1.5rem 5rem 1.5rem',
+    fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+    color: '#0f172a',
+  },
+  headerBadge: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: '0.5rem',
+    padding: '0.4rem 0.85rem',
+    backgroundColor: '#f1f5f9',
+    borderRadius: '9999px',
+    border: '1px solid #e2e8f0',
+    marginBottom: '2rem',
+  },
+  liveIndicator: {
+    width: '8px',
+    height: '8px',
+    borderRadius: '50%',
+    backgroundColor: '#e11d48',
+  },
+  badgeText: {
+    fontSize: '0.825rem',
+    fontWeight: 600,
+    color: '#475569',
+    letterSpacing: '0.02em',
+  },
+  heroSection: {
+    marginBottom: '3.5rem',
+  },
+  mainHeading: {
+    fontSize: 'clamp(2rem, 5.2vw, 3.25rem)',
+    lineHeight: 1.15,
+    fontWeight: 800,
+    letterSpacing: '-0.02em',
+    color: '#0f172a',
+    margin: 0,
+  },
+  highlightText: {
+    color: 'var(--overdue, #dc2626)',
+    display: 'block',
+    marginTop: '0.25rem',
+  },
+  description: {
+    marginTop: '1.75rem',
+    maxWidth: '62ch',
+    fontSize: '1.125rem',
+    lineHeight: 1.6,
+    color: '#334155',
+    fontWeight: 400,
+  },
+  demoSection: {
+    borderTop: '2px solid #e2e8f0',
+    paddingTop: '2.5rem',
+  },
+  sectionHeader: {
+    marginBottom: '1.75rem',
+  },
+  sectionTitle: {
+    fontSize: '1.35rem',
+    fontWeight: 700,
+    color: '#0f172a',
+    margin: 0,
+  },
+  otpNotice: {
+    color: '#64748b',
+    marginTop: '0.4rem',
+    fontSize: '0.95rem',
+  },
+  codeBlock: {
+    backgroundColor: '#f1f5f9',
+    padding: '0.15rem 0.4rem',
+    borderRadius: '4px',
+    color: '#0f172a',
+    fontWeight: 700,
+    fontFamily: 'monospace',
+    border: '1px solid #cbd5e1',
+  },
+  cardGrid: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '1rem',
+  },
+  cardLink: {
+    textDecoration: 'none',
+    color: 'inherit',
+    display: 'block',
+  },
+  card: {
+    backgroundColor: '#ffffff',
+    border: '1px solid #e2e8f0',
+    borderRadius: '12px',
+    padding: '1.25rem 1.5rem',
+    boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+  },
+  cardHeader: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: '0.75rem',
+  },
+  cardTag: {
+    fontSize: '0.75rem',
+    fontWeight: 700,
+    color: '#2563eb',
+    backgroundColor: '#eff6ff',
+    padding: '0.2rem 0.6rem',
+    borderRadius: '6px',
+    textTransform: 'uppercase',
+  },
+  uanText: {
+    fontSize: '0.825rem',
+    color: '#64748b',
+    fontFamily: 'monospace',
+  },
+  cardLabel: {
+    fontSize: '1.15rem',
+    fontWeight: 600,
+    color: '#0f172a',
+    margin: '0 0 0.75rem 0',
+    lineHeight: 1.35,
+  },
+  cardFooter: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    borderTop: '1px solid #f1f5f9',
+    paddingTop: '0.75rem',
+  },
+  whoText: {
+    fontSize: '0.875rem',
+    color: '#475569',
+    fontWeight: 500,
+  },
+  arrowIcon: {
+    fontSize: '1.1rem',
+    color: '#2563eb',
+    fontWeight: 700,
+  },
 }
