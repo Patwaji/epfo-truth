@@ -39,15 +39,61 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         />
       </head>
       <body className="min-h-full flex flex-col">
-        <div
+        {/* The header carries the same surface as the hero band, so the two
+            meet with no seam, and it holds the wordmark on every page. */}
+        <header
           style={{
-            display: "flex",
-            justifyContent: "flex-end",
-            padding: "0.75rem var(--pad-page) 0",
+            background: "var(--hero-bg)",
+            color: "var(--hero-fg)",
+            borderBottom: "1px solid var(--hero-rail)",
           }}
         >
-          <ThemeToggle />
-        </div>
+          <div
+            style={{
+              maxWidth: 1140,
+              margin: "0 auto",
+              padding: "0.85rem var(--pad-page)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: "1rem",
+            }}
+          >
+            <a
+              href="/"
+              style={{
+                display: "inline-flex",
+                alignItems: "baseline",
+                gap: "0.55rem",
+                textDecoration: "none",
+                color: "inherit",
+              }}
+            >
+              <span
+                style={{
+                  fontFamily: "var(--font-display)",
+                  fontSize: "1.15rem",
+                  fontWeight: 700,
+                  letterSpacing: "-0.02em",
+                }}
+              >
+                EPFO Truth
+              </span>
+              <span
+                style={{
+                  fontSize: "0.68rem",
+                  letterSpacing: "0.16em",
+                  fontWeight: 700,
+                  color: "var(--signal)",
+                }}
+              >
+                PROTOTYPE
+              </span>
+            </a>
+
+            <ThemeToggle />
+          </div>
+        </header>
 
         <div className="flex-1">{children}</div>
 

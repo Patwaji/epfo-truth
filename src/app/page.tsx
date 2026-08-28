@@ -45,8 +45,6 @@ export default function Home() {
       {/* ---- Hero: full bleed ink, the headline and the artifact, nothing else ---- */}
       <section className="on-ink" style={s.hero}>
         <div style={s.heroInner}>
-          <p style={s.eyebrow}>EPFO TRUTH ENGINE &middot; INDEPENDENT PROTOTYPE</p>
-
           <h1 style={s.h1}>
             your passbook says settled.
             <br />
