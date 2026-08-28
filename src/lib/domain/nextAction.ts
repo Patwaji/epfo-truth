@@ -72,7 +72,7 @@ export function nextAction(input: {
 
     if (daysLeft > 0) {
       return {
-        headline: `Wait — ${daysLeft} days left on the clock`,
+        headline: `Wait: ${daysLeft} days left on the clock`,
         detail:
           'Filing a grievance before EPFO passes its own timeline gets a template ' +
           'reply, and that closure can lock you out of filing another one for 30 days.',
@@ -93,7 +93,7 @@ export function nextAction(input: {
   }
 
   return {
-    headline: `EPFO is ${sla.overdueByDays} days overdue — escalate now`,
+    headline: `EPFO is ${sla.overdueByDays} days overdue. Escalate now.`,
     detail: `Your next step is ${rung.replace(/_/g, ' ').toLowerCase()}. The letter is already written for you.`,
     cta: { label: 'Open the escalation', href: `/claim/${claimId}#escalate` },
     urgency: 'ACT_NOW',

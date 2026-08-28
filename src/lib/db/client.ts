@@ -10,8 +10,8 @@ function createClient(): PrismaClient {
 
   if (!connectionString) {
     throw new Error(
-      'DATABASE_URL is not set. Add a Postgres connection string to .env — ' +
-        'run `npx create-db` for a free one, or use a Neon database.',
+      'DATABASE_URL is not set. Add a Postgres connection string to .env. ' +
+        'Run `npx create-db` for a free one, or use a Neon database.',
     )
   }
 

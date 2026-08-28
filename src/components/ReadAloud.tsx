@@ -1,5 +1,7 @@
 'use client'
 
+import { Volume2Icon } from '@/components/icons'
+
 import { useState, useEffect, useCallback } from 'react'
 
 interface ReadAloudProps {
@@ -70,7 +72,7 @@ export function ReadAloud({ text, lang = 'en-IN' }: ReadAloudProps) {
         ...(isSpeaking ? styles.buttonActive : {}),
       }}
     >
-      <span style={styles.icon}>{isSpeaking ? '⏹️' : '🔊'}</span>
+      <span style={styles.icon} aria-hidden="true"><Volume2Icon size={16} /></span>
       <span>{isSpeaking ? 'Stop Reading' : 'Listen'}</span>
       {isSpeaking && <span style={styles.pulseDot} />}
     </button>

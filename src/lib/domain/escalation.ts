@@ -169,7 +169,7 @@ export function draftFor(rung: Rung, ctx: DraftContext): Draft {
     case 'EPFIGMS':
       return {
         channel: 'EPFIGMS',
-        where: 'EPFiGMS — epfigms.gov.in',
+        where: 'EPFiGMS at epfigms.gov.in',
         subject: `Claim ${ctx.claimId} pending beyond the stated timeline`,
         body:
           `My provident fund claim has not been settled within the stated timeline.\n\n${facts}\n\n` +
@@ -184,8 +184,8 @@ export function draftFor(rung: Rung, ctx: DraftContext): Draft {
       return {
         channel: 'CPGRAMS',
         where:
-          'CPGRAMS — pgportal.gov.in (Ministry of Labour and Employment → Labour and Employment → EPFO)',
-        subject: `Delay in settlement of claim ${ctx.claimId} — ${ctx.daysElapsed} days`,
+          'CPGRAMS at pgportal.gov.in (Ministry of Labour and Employment → Labour and Employment → EPFO)',
+        subject: `Delay in settlement of claim ${ctx.claimId}: ${ctx.daysElapsed} days pending`,
         body:
           `My provident fund claim has been pending for ${ctx.daysElapsed} days, well ` +
           `beyond the stated processing timeline.\n\n${facts}${dockets}\n\n` +
@@ -200,7 +200,7 @@ export function draftFor(rung: Rung, ctx: DraftContext): Draft {
       return {
         channel: 'REGIONAL_EMAIL',
         where: 'Direct email to your Regional PF Office, copying acc.csd@epfindia.gov.in',
-        subject: `Claim ${ctx.claimId} pending ${ctx.daysElapsed} days — request for current status`,
+        subject: `Claim ${ctx.claimId} pending ${ctx.daysElapsed} days: request for current status`,
         body:
           `Respected Sir/Madam,\n\n${facts}${dockets}\n\n` +
           'This claim has been pending well past the stated timeline and my grievances ' +
@@ -213,7 +213,7 @@ export function draftFor(rung: Rung, ctx: DraftContext): Draft {
     case 'CPGRAMS_APPEAL':
       return {
         channel: 'CPGRAMS_APPEAL',
-        where: 'CPGRAMS — pgportal.gov.in → View Grievance Status → Appeal',
+        where: 'CPGRAMS at pgportal.gov.in, then View Grievance Status, then Appeal',
         subject: `Appeal against the disposal of my grievance on claim ${ctx.claimId}`,
         body:
           'I am appealing the disposal of my grievance because the reply did not ' +
@@ -227,7 +227,7 @@ export function draftFor(rung: Rung, ctx: DraftContext): Draft {
     case 'DPG':
       return {
         channel: 'DPG',
-        where: 'Directorate of Public Grievances — dpg.gov.in',
+        where: 'Directorate of Public Grievances at dpg.gov.in',
         subject: `Unresolved provident fund claim ${ctx.claimId} after the full grievance cycle`,
         body:
           'I have exhausted the EPFO and CPGRAMS grievance channels without ' +
@@ -242,7 +242,7 @@ export function draftFor(rung: Rung, ctx: DraftContext): Draft {
       return {
         channel: 'RTI',
         where:
-          'RTI Online — rtionline.gov.in (Public Authority: EPFO, addressed to the CPIO of your Regional Office)',
+          'RTI Online at rtionline.gov.in (Public Authority: EPFO, addressed to the CPIO of your Regional Office)',
         subject: `Information request regarding claim ${ctx.claimId}`,
         body:
           "To the CPIO, Employees' Provident Fund Organisation.\n\n" +

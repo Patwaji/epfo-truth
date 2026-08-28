@@ -1,3 +1,4 @@
+import { GlobeIcon, BookIcon, SendIcon, CurrencyRupeeIcon } from '@/components/icons'
 // src/components/ClaimTimeline.tsx
 import type { ClaimRecord } from '@/lib/domain/types'
 
@@ -12,12 +13,12 @@ interface TimelineEvent {
 
 const EVENT_CONFIG: Record<
   EventType,
-  { label: string; bg: string; color: string; icon: string }
+  { label: string; bg: string; color: string; icon: React.ComponentType<{ size?: number }> }
 > = {
-  PORTAL: { label: 'Portal', bg: '#eff6ff', color: '#1d4ed8', icon: '🌐' },
-  PASSBOOK: { label: 'Passbook', bg: '#fef3c7', color: '#b45309', icon: '📖' },
-  GRIEVANCE: { label: 'Grievance', bg: '#f3e8ff', color: '#7e22ce', icon: '⚖️' },
-  BANK: { label: 'Bank Settlement', bg: '#d1fae5', color: '#047857', icon: '🏦' },
+  PORTAL: { label: 'Portal', bg: '#eff6ff', color: '#1d4ed8', icon: GlobeIcon },
+  PASSBOOK: { label: 'Passbook', bg: '#fef3c7', color: '#b45309', icon: BookIcon },
+  GRIEVANCE: { label: 'Grievance', bg: '#f3e8ff', color: '#7e22ce', icon: SendIcon },
+  BANK: { label: 'Bank Settlement', bg: '#d1fae5', color: '#047857', icon: CurrencyRupeeIcon },
 }
 
 function formatDate(dateStr: string): string {
@@ -159,7 +160,7 @@ export function ClaimTimeline({ claim }: { claim: ClaimRecord }) {
                     boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
                   }}
                 >
-                  {cfg.icon}
+                  {(() => { const Icon = cfg.icon; return <Icon size={14} /> })()}
                 </div>
 
                 {/* Event Details Card */}

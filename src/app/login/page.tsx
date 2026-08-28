@@ -1,4 +1,5 @@
 'use client'
+import { LockIcon, TriangleAlertIcon } from '@/components/icons'
 
 import { useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -76,7 +77,7 @@ function LoginForm() {
 
       {error && (
         <div style={styles.errorBanner}>
-          <span style={styles.errorIcon}>⚠️</span>
+          <span style={styles.errorIcon} aria-hidden="true"><TriangleAlertIcon size={16} /></span>
           <span>{error}</span>
         </div>
       )}
@@ -104,7 +105,7 @@ export default function Login() {
           <Link href="/" style={styles.backLink}>
             ← Back to Overview
           </Link>
-          <span style={styles.securityTag}>🔒 Secure Portal</span>
+          <span style={styles.securityTag}><LockIcon size={14} /> Secure Portal</span>
         </div>
 
         <h1 style={styles.title}>Member Sign In</h1>

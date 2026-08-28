@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { TriangleAlertIcon } from '@/components/icons'
 import { SignOut } from '@/components/SignOut'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
@@ -70,7 +71,7 @@ export default async function Dashboard() {
       {stranded.length > 0 && (
         <section style={styles.strandedCard}>
           <div style={styles.strandedTop}>
-            <span style={styles.strandedBadge}>⚠️ Action Required</span>
+            <span style={styles.strandedBadge}><TriangleAlertIcon size={14} /> Action Required</span>
             <span style={styles.strandedAmount}>₹{strandedTotalFormatted}</span>
           </div>
           

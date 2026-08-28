@@ -1,5 +1,7 @@
-// src/components/EscalationLadder.tsx
 'use client'
+
+// src/components/EscalationLadder.tsx
+import { CheckedIcon, CopyIcon, SendIcon } from '@/components/icons'
 
 import { useState } from 'react'
 import type { Draft, GrievanceRecord, Rung } from '@/lib/domain/types'
@@ -100,7 +102,7 @@ export function EscalationLadder({
     >
       <div style={{ marginBottom: '2rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
-          <span style={{ fontSize: '1.25rem' }}>🚀</span>
+          <span aria-hidden="true"><SendIcon size={20} /></span>
           <h2 style={{ fontSize: '1.4rem', fontWeight: 700, color: 'var(--ink, #0f172a)', margin: 0 }}>
             Public Escalation Protocol
           </h2>
@@ -149,7 +151,7 @@ export function EscalationLadder({
                   boxShadow: isNow ? '0 0 0 4px rgba(37, 99, 235, 0.15)' : 'none',
                 }}
               >
-                {isDone ? '✓' : index + 1}
+                {isDone ? <CheckedIcon size={14} /> : index + 1}
               </div>
 
               {/* Step Main Info */}
@@ -191,7 +193,7 @@ export function EscalationLadder({
                 {rec?.closureText && (
                   <div style={{ marginTop: '0.5rem', padding: '0.65rem 0.85rem', borderRadius: '8px', backgroundColor: '#fff7ed', borderLeft: '3px solid #f97316' }}>
                     <p style={{ fontSize: '0.825rem', color: '#9a3412', margin: 0 }}>
-                      <strong>Closure Note:</strong> “{rec.closureText}” — Unresolved response triggered next escalation level.
+                      <strong>Closure Note:</strong> “{rec.closureText}”. Unresolved, which is what opened the next step.
                     </p>
                   </div>
                 )}
@@ -255,7 +257,7 @@ export function EscalationLadder({
                           cursor: 'pointer',
                         }}
                       >
-                        {copied ? '✓ Letter Copied!' : '📋 Copy Official Draft'}
+                        {copied ? 'Letter copied' : <><CopyIcon size={15} /> Copy official draft</>}
                       </button>
 
                       <button

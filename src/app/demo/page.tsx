@@ -130,7 +130,7 @@ export default function Demo() {
 
       const newEntry: LogEntry = {
         id: Math.random().toString(36).substr(2, 9),
-        text: `${id}: simulated date is now ${json.today || 'updated'}${creditNow ? ' — Money Credited ✓' : ''}`,
+        text: `${id}: simulated date is now ${json.today || 'updated'}${creditNow ? ', money credited' : ''}`,
         time: timeString,
         type: creditNow ? 'credit' : 'advance'
       }
@@ -215,7 +215,7 @@ export default function Demo() {
                         color: active ? '#a55f14' : done ? '#475569' : '#94a3b8',
                       }}
                     >
-                      {done ? '✓ ' : ''}{RUNG_LABEL[step]}{active ? ' ← next' : ''}
+                      {done ? 'done: ' : ''}{RUNG_LABEL[step]}{active ? ' (next)' : ''}
                     </span>
                   )
                 })}
@@ -242,7 +242,7 @@ export default function Demo() {
                 onClick={() => advance(id, 0, true)}
                 style={styles.btnSuccess}
               >
-                💳 Credit Money
+                Credit money
               </button>
               <button
                 disabled={loadingId !== null}

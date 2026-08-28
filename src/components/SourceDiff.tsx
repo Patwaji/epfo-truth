@@ -35,7 +35,7 @@ function buildRows(claim: ClaimRecord, today: string): Row[] {
     {
       source: 'EPFO member portal',
       says: latest ? humanStatus(latest.status) : 'no record of this claim',
-      when: latest?.observedAt ?? '—',
+      when: latest?.observedAt ?? 'no date',
       isGap: false,
     },
     {
@@ -46,7 +46,7 @@ function buildRows(claim: ClaimRecord, today: string): Row[] {
           : claim.passbook?.settledShown
             ? 'settled, nothing debited'
             : 'no entry for this claim',
-      when: claim.passbook?.observedAt ?? '—',
+      when: claim.passbook?.observedAt ?? 'no date',
       isGap: false,
     },
     {

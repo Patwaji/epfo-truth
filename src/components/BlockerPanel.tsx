@@ -1,29 +1,31 @@
-// src/components/BlockerPanel.tsx
 'use client'
+
+import { UserIcon, HomeIcon, WalletIcon, TriangleAlertIcon } from '@/components/icons'
+// src/components/BlockerPanel.tsx
 
 import type { Blocker } from '@/lib/domain/types'
 
 const ROLE_CONFIG: Record<
   Blocker['whoFixesIt'],
-  { label: string; badgeBg: string; badgeColor: string; icon: string }
+  { label: string; badgeBg: string; badgeColor: string; icon: React.ComponentType<{ size?: number }> }
 > = {
   YOU: {
     label: 'Action Required: You',
     badgeBg: '#eff6ff',
     badgeColor: '#1d4ed8',
-    icon: '👤',
+    icon: UserIcon,
   },
   EMPLOYER: {
     label: 'Action Required: Employer',
     badgeBg: '#fff7ed',
     badgeColor: '#c2410c',
-    icon: '🏢',
+    icon: HomeIcon,
   },
   EPFO: {
     label: 'Action Required: EPFO Office',
     badgeBg: '#fef2f2',
     badgeColor: '#b91c1c',
-    icon: '🏛️',
+    icon: WalletIcon,
   },
 }
 
@@ -34,7 +36,7 @@ export function BlockerPanel({ blocker }: { blocker: Blocker }) {
     label: 'Action Required',
     badgeBg: '#f3f4f6',
     badgeColor: '#374151',
-    icon: '⚠️',
+    icon: TriangleAlertIcon,
   }
 
   return (
@@ -79,7 +81,7 @@ export function BlockerPanel({ blocker }: { blocker: Blocker }) {
             letterSpacing: '0.01em',
           }}
         >
-          <span>{role.icon}</span>
+          <span aria-hidden="true">{(() => { const Icon = role.icon; return <Icon size={16} /> })()}</span>
           <span>{role.label}</span>
         </div>
 
