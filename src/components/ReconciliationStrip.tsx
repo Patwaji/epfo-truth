@@ -39,21 +39,6 @@ export function ReconciliationStrip({ onInk = false }: { onInk?: boolean }) {
             .rs-rail  { stroke: var(--rs-rail); stroke-width: 1.5; }
             .rs-path  { stroke: var(--rs-signal); stroke-width: 2.5; stroke-linecap: round; }
             .rs-coin  { fill: var(--rs-signal); }
-
-            @media (prefers-reduced-motion: no-preference) {
-              .rs-coin { animation: rs-move 4.6s ease-in-out infinite; }
-              .rs-path { animation: rs-draw 4.6s ease-in-out infinite; }
-            }
-            /* Leaves the passbook, crosses, and stops before it ever lands. */
-            @keyframes rs-move {
-              0%, 10%   { transform: translateX(0);     opacity: 0; }
-              16%       { opacity: 1; }
-              62%, 100% { transform: translateX(250px); opacity: 1; }
-            }
-            @keyframes rs-draw {
-              0%, 10%   { stroke-dashoffset: 250; }
-              62%, 100% { stroke-dashoffset: 0; }
-            }
           `}</style>
         </defs>
 

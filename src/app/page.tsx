@@ -1,5 +1,7 @@
 import Link from 'next/link'
 import { ReconciliationStrip } from '@/components/ReconciliationStrip'
+import { PortalWall } from '@/components/PortalWall'
+import { VoiceWall } from '@/components/VoiceWall'
 
 interface DemoUser {
   uan: string
@@ -75,6 +77,8 @@ export default function Home() {
         </div>
       </section>
 
+      <VoiceWall />
+
       {/* ---- What it does ---- */}
       <section style={s.body}>
         <p style={s.lede}>
@@ -85,6 +89,8 @@ export default function Home() {
           misses its own deadline.
         </p>
       </section>
+
+      <PortalWall />
 
       {/* ---- Pick a person ---- */}
       <section style={s.picker}>
