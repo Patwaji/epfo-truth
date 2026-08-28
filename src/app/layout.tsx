@@ -39,6 +39,16 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         />
       </head>
       <body className="min-h-full flex flex-col">
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            padding: "0.75rem var(--pad-page) 0",
+          }}
+        >
+          <ThemeToggle />
+        </div>
+
         <div className="flex-1">{children}</div>
 
         {/* Required on every page: this must never be mistaken for EPFO. */}
@@ -51,26 +61,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             fontSize: 14,
           }}
         >
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "flex-start",
-              gap: "1.5rem",
-              flexWrap: "wrap",
-            }}
-          >
-            <p style={{ maxWidth: "68ch", margin: 0 }}>
+          <p style={{ maxWidth: "68ch", margin: 0 }}>
             <strong style={{ color: "var(--ink-2)", fontWeight: 600 }}>
               Independent hackathon prototype.
             </strong>{" "}
             Not affiliated with EPFO, the Ministry of Labour and Employment, or
             the Government of India. Every member, claim and amount shown is
             synthetic. No real government system is contacted.
-            </p>
-
-            <ThemeToggle />
-          </div>
+          </p>
         </footer>
       </body>
     </html>

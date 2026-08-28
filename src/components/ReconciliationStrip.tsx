@@ -1,0 +1,90 @@
+/**
+ * The argument of the product, drawn instead of described.
+ *
+ * Three ledger lines, one per system EPFO tracks a claim in. The money leaves
+ * the passbook, travels, and stops short: the bank line ends in an empty slot
+ * it never reached. That gap is the whole story, and it reads in about a
+ * second, which is more than the paragraph underneath it will get.
+ *
+ * Pure SVG and CSS, no JavaScript: it renders identically with scripts off, and
+ * the motion only moves something already on screen rather than revealing it.
+ */
+export function ReconciliationStrip() {
+  return (
+    <figure style={{ margin: '2.5rem 0 0', maxWidth: 640 }} aria-labelledby="strip-caption">
+      <svg
+        viewBox="0 0 640 300"
+        width="100%"
+        height="auto"
+        role="img"
+        aria-label="One claim across three EPFO systems. The member portal says submitted at portal. The passbook says one lakh twenty thousand rupees was debited. The bank account has received nothing."
+        style={{ display: 'block' }}
+      >
+        <defs>
+          <style>{`
+            .rs-src   { font: 600 12.5px var(--font-body); fill: var(--ink-3); letter-spacing: .04em; }
+            .rs-val   { font: 700 16px var(--font-body);   fill: var(--ink); }
+            .rs-miss  { font: 700 16px var(--font-body);   fill: var(--crit); }
+            .rs-note  { font: 500 12px var(--font-body);   fill: var(--crit); }
+            .rs-rail  { stroke: var(--line); stroke-width: 1.5; }
+            .rs-path  { stroke: var(--amber); stroke-width: 2; stroke-linecap: round; }
+            .rs-coin  { fill: var(--amber); }
+
+            @media (prefers-reduced-motion: no-preference) {
+              .rs-coin { animation: rs-move 4.6s ease-in-out infinite; }
+              .rs-path { animation: rs-draw 4.6s ease-in-out infinite; }
+            }
+            /* Leaves the passbook, crosses, and stops before it ever lands. */
+            @keyframes rs-move {
+              0%, 10%   { transform: translateX(0);     opacity: 0; }
+              16%       { opacity: 1; }
+              62%, 100% { transform: translateX(250px); opacity: 1; }
+            }
+            @keyframes rs-draw {
+              0%, 10%   { stroke-dashoffset: 250; }
+              62%, 100% { stroke-dashoffset: 0; }
+            }
+          `}</style>
+        </defs>
+
+        {/* Row 1: the portal */}
+        <text className="rs-src" x="0" y="16">EPFO MEMBER PORTAL</text>
+        <text className="rs-val" x="0" y="44">Submitted at portal</text>
+        <line className="rs-rail" x1="0" y1="62" x2="640" y2="62" />
+
+        {/* Row 2: the passbook, where the money leaves */}
+        <text className="rs-src" x="0" y="106">EPFO PASSBOOK</text>
+        <text className="rs-val" x="0" y="134">&#8377;1,20,000 debited</text>
+        <line className="rs-rail" x1="0" y1="152" x2="640" y2="152" />
+
+        {/* The journey it is supposed to make, and where it stops */}
+        <line
+          className="rs-path"
+          x1="330" y1="152" x2="580" y2="152"
+          strokeDasharray="250" strokeDashoffset="0"
+        />
+        <circle className="rs-coin" cx="330" cy="152" r="5.5" />
+
+        {/* Row 3: the bank, where it never arrives */}
+        <text className="rs-src" x="0" y="196">YOUR BANK ACCOUNT</text>
+        <text className="rs-miss" x="0" y="224">Nothing received</text>
+        <line className="rs-rail" x1="0" y1="242" x2="640" y2="242" />
+
+        {/* The empty slot */}
+        <rect
+          x="500" y="196" width="140" height="46" rx="2"
+          fill="none" stroke="var(--crit)" strokeWidth="1.5" strokeDasharray="5 4"
+        />
+        <text className="rs-note" x="570" y="224" textAnchor="middle">never arrived</text>
+      </svg>
+
+      <figcaption
+        id="strip-caption"
+        style={{ marginTop: '1.25rem', color: 'var(--ink-2)', fontSize: '0.95rem', maxWidth: '52ch' }}
+      >
+        One claim. Three systems that never agree, and never appear on the same
+        screen. This is why nobody can tell where their own money is.
+      </figcaption>
+    </figure>
+  )
+}

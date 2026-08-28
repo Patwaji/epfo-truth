@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { ReconciliationStrip } from '@/components/ReconciliationStrip'
 
 interface DemoUser {
   uan: string
@@ -42,6 +43,8 @@ export default function Home() {
           Your bank says nothing arrived.<br />
           <span style={styles.highlightText}>Both are EPFO.</span>
         </h1>
+
+        <ReconciliationStrip />
 
         <p style={styles.description}>
           Every salaried person in India has a PF account, and almost nobody can tell what is happening
