@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation'
 import { prisma } from '@/lib/db/client'
 import { toMemberProfile } from '@/lib/db/map'
 import { preflight } from '@/lib/domain/preflight'
+import { FileClaimButton } from '@/components/FileClaimButton'
 
 /**
  * Check a claim before EPFO does.
@@ -112,21 +113,7 @@ export default async function FilePage() {
             : 'Fix the items above first. Each one is checked by EPFO the moment you submit, and any single failure rejects the whole claim with no reason given.'}
         </p>
 
-        <button
-          disabled={!canFile}
-          style={{
-            marginTop: '1rem',
-            padding: '0.6rem 1.1rem',
-            border: '1px solid',
-            borderColor: canFile ? 'var(--green)' : 'var(--line)',
-            background: 'transparent',
-            color: canFile ? 'var(--green)' : 'var(--ink-3)',
-            fontWeight: 600,
-            cursor: canFile ? 'pointer' : 'not-allowed',
-          }}
-        >
-          {canFile ? 'File this claim (simulated)' : 'Blocked until the above is fixed'}
-        </button>
+        <FileClaimButton canFile={canFile} />
       </div>
 
       <p style={{ marginTop: '2rem' }}>
