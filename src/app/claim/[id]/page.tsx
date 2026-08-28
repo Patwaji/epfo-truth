@@ -9,11 +9,15 @@ import { ClaimTimeline } from '@/components/ClaimTimeline'
 
 async function getClaim(id: string) {
   try {
+    // `||` binds tighter than `?:`, so writing this as
+    // `A || B ? https://B : localhost` made the ternary test (A || B) and then
+    // always build the URL from VERCEL_URL — which is undefined off Vercel, so
+    // every claim page fetched https://undefined and 404'd.
     const base =
-      process.env.NEXT_PUBLIC_BASE_URL ||
-      process.env.VERCEL_URL
+      process.env.NEXT_PUBLIC_BASE_URL ??
+      (process.env.VERCEL_URL
         ? `https://${process.env.VERCEL_URL}`
-        : 'http://localhost:3000'
+        : 'http://localhost:3000')
 
     const res = await fetch(`${base}/api/claims/${id}`, { cache: 'no-store' })
     if (!res.ok) return null

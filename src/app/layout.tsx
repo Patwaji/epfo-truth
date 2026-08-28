@@ -25,8 +25,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
+    // Deliberately single-theme. The claim page and its panels are painted in
+    // fixed light values, so honouring a dark OS preference would put near-black
+    // headings on a near-black ground. Pinning data-theme keeps every surface
+    // consistent instead of half-converted.
     <html
       lang="en"
+      data-theme="light"
       className={`${publicSans.variable} ${sourceSerif.variable} h-full`}
     >
       <body className="min-h-full flex flex-col">
