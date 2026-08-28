@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { ReconciliationStrip } from '@/components/ReconciliationStrip'
+import { PassbookArtifact } from '@/components/PassbookArtifact'
 import { PortalWall } from '@/components/PortalWall'
 import { VoiceWall } from '@/components/VoiceWall'
 
@@ -45,13 +46,38 @@ export default function Home() {
       {/* ---- Hero: full bleed ink, the headline and the artifact, nothing else ---- */}
       <section className="on-ink" style={s.hero}>
         <div style={s.heroInner}>
-          <h1 style={s.h1}>
-            your passbook says settled.
-            <br />
-            your bank says nothing arrived.
-            <br />
-            <span style={{ color: 'var(--signal)' }}>both are EPFO.</span>
-          </h1>
+          <div style={s.heroGrid}>
+            <div>
+              <h1 style={s.h1}>
+                find out where your PF money
+                <span style={{ color: 'var(--signal)' }}> actually is</span>
+              </h1>
+
+              <p style={s.sub}>
+                EPFO tracks one claim in three systems that disagree, and tells
+                you none of it. We read all three, name what is really blocking
+                your money, and escalate on your behalf when EPFO misses its own
+                twenty day deadline.
+              </p>
+
+              <div style={s.ctaRow}>
+                <a href="#people" className="pop-press" style={s.ctaPrimary}>
+                  Check a claim
+                </a>
+                <a href="/demo" style={s.ctaSecondary}>
+                  See it run &#8594;
+                </a>
+              </div>
+
+              <p style={s.trust}>
+                No signup. Three real cases loaded. Nothing is sent to EPFO.
+              </p>
+            </div>
+
+            <div style={s.heroArt}>
+              <PassbookArtifact />
+            </div>
+          </div>
 
           <div style={s.stripWrap}>
             <ReconciliationStrip onInk />
@@ -91,7 +117,7 @@ export default function Home() {
       <PortalWall />
 
       {/* ---- Pick a person ---- */}
-      <section className="on-ink" style={s.picker}>
+      <section id="people" className="on-ink" style={s.picker}>
         <div style={s.pickerInner}>
         <div style={s.pickerHead}>
           <h2 style={s.h2}>pick someone and see it</h2>
@@ -144,15 +170,52 @@ const s: Record<string, React.CSSProperties> = {
 
   h1: {
     fontFamily: 'var(--font-display)',
-    fontSize: 'clamp(1.95rem, 4.3vw, 3.6rem)',
+    fontSize: 'clamp(2.1rem, 3.6vw, 3.4rem)',
     lineHeight: 0.98,
     letterSpacing: '-0.04em',
     fontWeight: 700,
     color: 'var(--hero-fg)',
     margin: 0,
-    maxWidth: '33ch',
+    maxWidth: '16ch',
   },
 
+  heroGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(330px, 1fr))',
+    gap: 'clamp(2rem, 5vw, 3.5rem)',
+    alignItems: 'center',
+  },
+  heroArt: { minWidth: 0 },
+  sub: {
+    color: 'var(--hero-dim)',
+    fontSize: 'clamp(1rem, 1.5vw, 1.15rem)',
+    lineHeight: 1.55,
+    margin: '1.25rem 0 0',
+    maxWidth: '46ch',
+  },
+  ctaRow: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    gap: '1rem',
+    marginTop: 'clamp(1.5rem, 3vw, 2rem)',
+  },
+  ctaPrimary: {
+    background: '#ff8a3d',
+    color: '#1a1613',
+    padding: '0.8rem 1.4rem',
+    fontWeight: 700,
+    fontSize: '1rem',
+    textDecoration: 'none',
+    display: 'inline-block',
+  },
+  ctaSecondary: {
+    color: 'var(--hero-fg)',
+    fontWeight: 600,
+    textDecorationThickness: '2px',
+    textUnderlineOffset: '4px',
+  },
+  trust: { color: 'var(--hero-dim)', fontSize: '0.85rem', marginTop: '1.1rem' },
   stripWrap: { marginTop: 'clamp(2.5rem, 6vw, 4.5rem)', maxWidth: 980 },
 
   stats: {
