@@ -3,18 +3,7 @@ import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { prisma } from '@/lib/db/client'
 import { findStranded, strandedTotalPaise } from '@/lib/domain/stranded'
-
-interface AccountItem {
-  id: string
-  memberId: string
-  employer: string
-  joinedOn: string
-  exitedOn: string | null
-  dateOfExitMarked: boolean
-  epfBalancePaise: number
-  epsBalancePaise: number
-  transferredOut: boolean
-}
+import { toMemberProfile } from '@/lib/db/map'
 
 interface ClaimItem {
   id: string
@@ -43,31 +32,7 @@ export default async function Dashboard() {
 
   const current = m.claims[0]?.memberId ?? ''
 
-  const stranded = findStranded(
-    {
-      uan: m.uan,
-      nameOnEpfo: m.nameOnEpfo,
-      nameOnAadhaar: m.nameOnAadhaar,
-      nameOnBank: m.nameOnBank,
-      dobOnEpfo: m.dobOnEpfo,
-      dobOnAadhaar: m.dobOnAadhaar,
-      bankNpciVerified: m.bankNpciVerified,
-      chequeUploadLegible: m.chequeUploadLegible,
-      epsFlaggedButIneligible: m.epsFlaggedButIneligible,
-      otherUans: m.otherUans,
-      accounts: m.accounts.map((a: AccountItem) => ({
-        memberId: a.memberId,
-        employer: a.employer,
-        joinedOn: a.joinedOn,
-        exitedOn: a.exitedOn,
-        dateOfExitMarked: a.dateOfExitMarked,
-        epfBalancePaise: a.epfBalancePaise,
-        epsBalancePaise: a.epsBalancePaise,
-        transferredOut: a.transferredOut,
-      })),
-    },
-    current
-  )
+  const stranded = findStranded(toMemberProfile(m), current)
 
   const strandedTotalFormatted = (strandedTotalPaise(stranded) / 100).toLocaleString('en-IN')
 
