@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Public_Sans, Source_Serif_4 } from "next/font/google";
 import "./globals.css";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 // A civic UI face for the interface, a document serif for headings and money.
 // Both are loaded with a real fallback stack in globals.css, so a failed font
@@ -25,15 +26,18 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    // Deliberately single-theme. The claim page and its panels are painted in
-    // fixed light values, so honouring a dark OS preference would put near-black
-    // headings on a near-black ground. Pinning data-theme keeps every surface
-    // consistent instead of half-converted.
     <html
       lang="en"
-      data-theme="light"
       className={`${publicSans.variable} ${sourceSerif.variable} h-full`}
+      suppressHydrationWarning
     >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)}catch(e){}`,
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col">
         <div className="flex-1">{children}</div>
 
@@ -47,14 +51,26 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             fontSize: 14,
           }}
         >
-          <p style={{ maxWidth: "68ch", margin: 0 }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "flex-start",
+              gap: "1.5rem",
+              flexWrap: "wrap",
+            }}
+          >
+            <p style={{ maxWidth: "68ch", margin: 0 }}>
             <strong style={{ color: "var(--ink-2)", fontWeight: 600 }}>
               Independent hackathon prototype.
             </strong>{" "}
             Not affiliated with EPFO, the Ministry of Labour and Employment, or
             the Government of India. Every member, claim and amount shown is
             synthetic. No real government system is contacted.
-          </p>
+            </p>
+
+            <ThemeToggle />
+          </div>
         </footer>
       </body>
     </html>

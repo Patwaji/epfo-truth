@@ -44,6 +44,12 @@
   --crit: #8f2b1e;
   --crit-soft: rgba(143, 43, 30, 0.09);
 
+  /* A terminal is dark in either theme, so it gets its own pair rather than
+     flipping with the page and turning into a cream box. */
+  --terminal: #14110f;
+  --terminal-ink: #f2ede4;
+  --terminal-line: rgba(242, 237, 228, 0.14);
+
   /* Aliases used by components written before these names settled. */
   --paper-raised: var(--raised);
   --ink-soft: var(--ink-2);

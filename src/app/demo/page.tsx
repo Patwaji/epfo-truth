@@ -410,18 +410,18 @@ const styles: Record<string, React.CSSProperties> = {
     marginLeft: 'auto',
   },
   terminalSection: {
-    backgroundColor: 'var(--ink)',
+    backgroundColor: 'var(--terminal)',
     borderRadius: '14px',
     overflow: 'hidden',
     boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.25)',
   },
   terminalHeader: {
-    backgroundColor: 'var(--ink)',
+    backgroundColor: 'var(--terminal)',
     padding: '0.75rem 1rem',
     display: 'flex',
     alignItems: 'center',
     gap: '1rem',
-    borderBottom: '1px solid var(--ink-2)',
+    borderBottom: '1px solid var(--terminal-line)',
   },
   terminalDots: {
     display: 'flex',
@@ -434,7 +434,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   terminalTitle: {
     fontSize: '0.8rem',
-    color: 'var(--paper)',
+    color: 'var(--terminal-ink)',
     fontFamily: 'monospace',
     fontWeight: 600,
   },
@@ -447,7 +447,7 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: '0.875rem',
   },
   emptyLog: {
-    color: 'var(--paper)',
+    color: 'var(--terminal-ink)',
     fontStyle: 'italic',
   },
   logList: {
@@ -464,14 +464,14 @@ const styles: Record<string, React.CSSProperties> = {
     alignItems: 'baseline',
   },
   logTime: {
-    color: 'var(--ink-3)',
+    color: 'rgba(242, 237, 228, 0.55)',
     fontSize: '0.8rem',
   },
   logText: {
-    color: 'var(--green)',
+    color: '#8fd8c6',
   },
   logTextCredit: {
-    color: 'var(--green-soft)',
+    color: '#8fd8c6',
     fontWeight: 700,
   },
 }
