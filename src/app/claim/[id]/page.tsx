@@ -83,7 +83,7 @@ export default async function ClaimPage({
       </header>
 
       {/* Main Sections */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', minWidth: 0 }}>
         <TruthCard
           truth={d.truth}
           sla={d.sla}

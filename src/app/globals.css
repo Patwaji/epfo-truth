@@ -107,6 +107,9 @@ html {
 body {
   /* Explicit, because the page composites over a ground we do not control. */
   background: var(--paper);
+  /* Deeply nested panels can gain a few stray pixels of width; clamp here so a
+     phone never gets a sideways scroll. Wide tables still scroll in .scroll-x. */
+  overflow-x: hidden;
   color: var(--ink);
   font-family: var(--font-body);
   font-size: 17px;
@@ -189,9 +192,13 @@ td.num {
   padding: clamp(2rem, 5vw, 3.5rem) var(--pad-page);
 }
 
-/* Wide content scrolls inside its own box, never the document. */
+/* Wide content scrolls inside its own box, never the document. Without an
+   explicit max-width the wrapper can be sized by its content in a grid or
+   flex parent, letting a wide table push the page sideways. */
 .scroll-x {
   overflow-x: auto;
+  max-width: 100%;
+  -webkit-overflow-scrolling: touch;
 }
 
 @media (prefers-reduced-motion: reduce) {
