@@ -81,7 +81,7 @@ export function nextRung(
   // Something in the chain worked. Do not keep climbing.
   if (history.some((g) => g.resolved)) return 'WAIT'
 
-  if (!sla.breached && history.length === 0) return 'WAIT'
+  if (!sla.breached) return 'WAIT'
 
   const epfigms = find(history, 'EPFIGMS')
   if (!epfigms) return 'EPFIGMS'

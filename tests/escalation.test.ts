@@ -173,3 +173,19 @@ describe('nextRung on a rejected claim', () => {
     expect(d.body).not.toMatch(/still inside the stated processing window/i)
   })
 })
+
+describe('nextRung inside the SLA window', () => {
+  // A claim can carry an old, closed grievance while its clock has been rewound
+  // or refiled. Escalating then tells someone EPFO is "0 days overdue", and
+  // sends them to file a grievance they have not earned yet, which gets closed
+  // on sight and can lock them out for 30 days.
+  it('waits while inside the window even if a closed grievance exists', () => {
+    const h = [closedUnresolved('EPFIGMS', '2026-07-25')]
+    expect(nextRung(inTime, h, ctx.today)).toBe('WAIT')
+  })
+
+  it('still escalates once the window is actually breached', () => {
+    const h = [closedUnresolved('EPFIGMS', '2026-07-25')]
+    expect(nextRung(breached, h, ctx.today)).toBe('CPGRAMS')
+  })
+})
