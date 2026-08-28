@@ -6,6 +6,7 @@ import { redirect } from 'next/navigation'
 import { prisma } from '@/lib/db/client'
 import { findStranded, strandedTotalPaise } from '@/lib/domain/stranded'
 import { toMemberProfile } from '@/lib/db/map'
+import { getClaimView } from '@/lib/claimView'
 
 interface ClaimItem {
   id: string
@@ -36,6 +37,11 @@ export default async function Dashboard() {
 
   const stranded = findStranded(toMemberProfile(m), current)
 
+  const views = Object.fromEntries(
+    (await Promise.all(m.claims.map(async (c: ClaimItem) => [c.id, await getClaimView(c.id)] as const)))
+      .filter(([, v]) => v),
+  )
+
   const strandedTotalFormatted = (strandedTotalPaise(stranded) / 100).toLocaleString('en-IN')
 
   return (
@@ -56,7 +62,7 @@ export default async function Dashboard() {
               style={{
                 fontSize: '0.85rem',
                 fontWeight: 600,
-                color: '#145a4e',
+                color: 'var(--green)',
                 textDecoration: 'underline',
                 textUnderlineOffset: '3px',
               }}
@@ -126,6 +132,38 @@ export default async function Dashboard() {
                     <span style={styles.claimAmount}>₹{formattedAmount}</span>
                   </div>
 
+                  {views[c.id] && (
+                    <div
+                      style={{
+                        marginTop: '0.9rem',
+                        paddingTop: '0.9rem',
+                        borderTop: '1px solid var(--line-soft)',
+                      }}
+                    >
+                      <p style={{ margin: 0, fontWeight: 700, fontSize: '0.98rem' }}>
+                        {views[c.id]!.action.headline}
+                      </p>
+                      <p
+                        style={{
+                          margin: '0.3rem 0 0',
+                          fontSize: '0.85rem',
+                          color: views[c.id]!.sla.breached ? 'var(--amber)' : 'var(--ink-3)',
+                          fontVariantNumeric: 'tabular-nums',
+                        }}
+                      >
+                        {views[c.id]!.sla.daysElapsed} days since you filed
+                        {views[c.id]!.sla.breached
+                          ? `, ${views[c.id]!.sla.overdueByDays} past EPFO's own ${views[c.id]!.sla.slaDays}-day limit`
+                          : ''}
+                      </p>
+                      <p style={{ margin: '0.45rem 0 0', fontSize: '0.85rem', color: 'var(--ink-2)' }}>
+                        {views[c.id]!.blocker.code === 'NONE'
+                          ? 'Nothing is blocking this claim.'
+                          : views[c.id]!.blocker.title}
+                      </p>
+                    </div>
+                  )}
+
                   <div style={styles.claimCardFooter}>
                     <span style={styles.filedDate}>Filed on {c.filedAt}</span>
                     <span style={styles.viewLinkText}>Audit Timeline →</span>
@@ -146,16 +184,16 @@ const styles: Record<string, React.CSSProperties> = {
     margin: '0 auto',
     padding: '3rem 1.5rem 5rem 1.5rem',
     fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-    color: '#0f172a',
+    color: 'var(--ink)',
   },
   profileHeader: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: '1.5rem 1.75rem',
-    backgroundColor: '#ffffff',
+    backgroundColor: 'var(--paper-raised)',
     borderRadius: '16px',
-    border: '1px solid #e2e8f0',
+    border: '1px solid var(--line)',
     marginBottom: '2rem',
     boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)',
   },
@@ -168,8 +206,8 @@ const styles: Record<string, React.CSSProperties> = {
     width: '52px',
     height: '52px',
     borderRadius: '50%',
-    backgroundColor: '#0f172a',
-    color: '#ffffff',
+    backgroundColor: 'var(--ink)',
+    color: 'var(--paper-raised)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -179,14 +217,14 @@ const styles: Record<string, React.CSSProperties> = {
   uanBadge: {
     fontSize: '0.825rem',
     fontWeight: 600,
-    color: '#64748b',
+    color: 'var(--ink-3)',
     fontFamily: 'monospace',
     textTransform: 'uppercase',
   },
   memberName: {
     fontSize: '1.6rem',
     fontWeight: 800,
-    color: '#0f172a',
+    color: 'var(--ink)',
     margin: '0.1rem 0 0 0',
   },
   headerRight: {
@@ -196,15 +234,15 @@ const styles: Record<string, React.CSSProperties> = {
   statusChip: {
     fontSize: '0.75rem',
     fontWeight: 700,
-    color: '#15803d',
-    backgroundColor: '#f0fdf4',
-    border: '1px solid #bbf7d0',
+    color: 'var(--green)',
+    backgroundColor: 'var(--green-soft)',
+    border: '1px solid var(--green-soft)',
     padding: '0.35rem 0.75rem',
     borderRadius: '9999px',
   },
   strandedCard: {
-    backgroundColor: '#fff1f2',
-    border: '1.5px solid #fecdd3',
+    backgroundColor: 'var(--crit-soft)',
+    border: '1.5px solid var(--crit-soft)',
     borderRadius: '16px',
     padding: '2rem',
     marginBottom: '2.5rem',
@@ -218,8 +256,8 @@ const styles: Record<string, React.CSSProperties> = {
   strandedBadge: {
     fontSize: '0.8rem',
     fontWeight: 700,
-    color: '#9f1239',
-    backgroundColor: '#ffe4e6',
+    color: 'var(--crit)',
+    backgroundColor: 'var(--crit-soft)',
     padding: '0.3rem 0.75rem',
     borderRadius: '6px',
     textTransform: 'uppercase',
@@ -227,18 +265,18 @@ const styles: Record<string, React.CSSProperties> = {
   strandedAmount: {
     fontSize: '1.75rem',
     fontWeight: 800,
-    color: '#be123c',
+    color: 'var(--crit)',
   },
   strandedTitle: {
     fontSize: '1.45rem',
     fontWeight: 800,
-    color: '#881337',
+    color: 'var(--crit)',
     margin: '0 0 0.75rem 0',
   },
   strandedDescription: {
     fontSize: '1rem',
     lineHeight: 1.6,
-    color: '#9f1239',
+    color: 'var(--crit)',
     maxWidth: '65ch',
     marginBottom: '1.5rem',
   },
@@ -246,17 +284,17 @@ const styles: Record<string, React.CSSProperties> = {
     display: 'flex',
     flexDirection: 'column',
     gap: '0.75rem',
-    borderTop: '1px solid #fda4af',
+    borderTop: '1px solid var(--crit-soft)',
     paddingTop: '1.25rem',
   },
   strandedAccountRow: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#ffffff',
+    backgroundColor: 'var(--paper-raised)',
     padding: '0.85rem 1.15rem',
     borderRadius: '10px',
-    border: '1px solid #fecdd3',
+    border: '1px solid var(--crit-soft)',
   },
   strandedAccountInfo: {
     display: 'flex',
@@ -264,19 +302,19 @@ const styles: Record<string, React.CSSProperties> = {
   },
   employerName: {
     fontSize: '1rem',
-    color: '#0f172a',
+    color: 'var(--ink)',
     fontWeight: 700,
   },
   memberIdText: {
     fontSize: '0.825rem',
-    color: '#64748b',
+    color: 'var(--ink-3)',
     fontFamily: 'monospace',
     marginTop: '0.15rem',
   },
   strandedAccountAmount: {
     fontSize: '1.1rem',
     fontWeight: 700,
-    color: '#be123c',
+    color: 'var(--crit)',
   },
   claimsSection: {
     marginTop: '1rem',
@@ -290,12 +328,12 @@ const styles: Record<string, React.CSSProperties> = {
   sectionTitle: {
     fontSize: '1.35rem',
     fontWeight: 800,
-    color: '#0f172a',
+    color: 'var(--ink)',
     margin: 0,
   },
   claimsCount: {
     fontSize: '0.875rem',
-    color: '#64748b',
+    color: 'var(--ink-3)',
     fontWeight: 600,
   },
   claimsGrid: {
@@ -309,8 +347,8 @@ const styles: Record<string, React.CSSProperties> = {
     display: 'block',
   },
   claimCard: {
-    backgroundColor: '#ffffff',
-    border: '1px solid #e2e8f0',
+    backgroundColor: 'var(--paper-raised)',
+    border: '1px solid var(--line)',
     borderRadius: '14px',
     padding: '1.25rem',
     boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)',
@@ -329,15 +367,15 @@ const styles: Record<string, React.CSSProperties> = {
   claimType: {
     fontSize: '0.75rem',
     fontWeight: 700,
-    color: '#2563eb',
-    backgroundColor: '#eff6ff',
+    color: 'var(--green)',
+    backgroundColor: 'var(--green-soft)',
     padding: '0.25rem 0.6rem',
     borderRadius: '6px',
     textTransform: 'uppercase',
   },
   claimId: {
     fontSize: '0.8rem',
-    color: '#94a3b8',
+    color: 'var(--ink-3)',
     fontFamily: 'monospace',
   },
   claimCardBody: {
@@ -347,29 +385,29 @@ const styles: Record<string, React.CSSProperties> = {
   },
   claimAmountLabel: {
     fontSize: '0.8rem',
-    color: '#64748b',
+    color: 'var(--ink-3)',
     fontWeight: 500,
   },
   claimAmount: {
     fontSize: '1.6rem',
     fontWeight: 800,
-    color: '#0f172a',
+    color: 'var(--ink)',
     marginTop: '0.2rem',
   },
   claimCardFooter: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    borderTop: '1px solid #f1f5f9',
+    borderTop: '1px solid var(--paper)',
     paddingTop: '0.85rem',
   },
   filedDate: {
     fontSize: '0.825rem',
-    color: '#64748b',
+    color: 'var(--ink-3)',
   },
   viewLinkText: {
     fontSize: '0.85rem',
     fontWeight: 700,
-    color: '#2563eb',
+    color: 'var(--green)',
   },
 }

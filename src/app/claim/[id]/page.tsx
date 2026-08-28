@@ -39,26 +39,26 @@ export default async function ClaimPage({
           alignItems: 'center',
           paddingBottom: '1.25rem',
           marginBottom: '2rem',
-          borderBottom: '1px solid var(--line, #e2e8f0)',
+          borderBottom: '1px solid var(--line, var(--line))',
           flexWrap: 'wrap',
           gap: '0.75rem',
         }}
       >
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <span style={{ fontSize: '0.75rem', padding: '0.2rem 0.5rem', borderRadius: '4px', backgroundColor: '#0f172a', color: '#ffffff', fontWeight: 700 }}>
+            <span style={{ fontSize: '0.75rem', padding: '0.2rem 0.5rem', borderRadius: '4px', backgroundColor: 'var(--ink)', color: 'var(--paper-raised)', fontWeight: 700 }}>
               EPFO TRUTH LAYER
             </span>
-            <span style={{ fontSize: '0.85rem', color: '#64748b' }}>• Ref: {d.claim.id}</span>
+            <span style={{ fontSize: '0.85rem', color: 'var(--ink-3)' }}>• Ref: {d.claim.id}</span>
           </div>
-          <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: '#0f172a', marginTop: '0.4rem', margin: 0 }}>
+          <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--ink)', marginTop: '0.4rem', margin: 0 }}>
             Claim Audit & Escalation Portal
           </h1>
         </div>
 
         <div style={{ textAlign: 'right' }}>
-          <span style={{ fontSize: '0.75rem', color: '#64748b', display: 'block' }}>System Timestamp</span>
-          <strong style={{ fontSize: '0.85rem', fontFamily: 'monospace', color: '#334155' }}>
+          <span style={{ fontSize: '0.75rem', color: 'var(--ink-3)', display: 'block' }}>System Timestamp</span>
+          <strong style={{ fontSize: '0.85rem', fontFamily: 'monospace', color: 'var(--ink-2)' }}>
             {d.today ? new Date(d.today).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : 'Live'}
           </strong>
         </div>

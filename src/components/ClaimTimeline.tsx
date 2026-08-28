@@ -15,10 +15,10 @@ const EVENT_CONFIG: Record<
   EventType,
   { label: string; bg: string; color: string; icon: React.ComponentType<{ size?: number }> }
 > = {
-  PORTAL: { label: 'Portal', bg: '#eff6ff', color: '#1d4ed8', icon: GlobeIcon },
-  PASSBOOK: { label: 'Passbook', bg: '#fef3c7', color: '#b45309', icon: BookIcon },
-  GRIEVANCE: { label: 'Grievance', bg: '#f3e8ff', color: '#7e22ce', icon: SendIcon },
-  BANK: { label: 'Bank Settlement', bg: '#d1fae5', color: '#047857', icon: CurrencyRupeeIcon },
+  PORTAL: { label: 'Portal', bg: 'var(--green-soft)', color: 'var(--green)', icon: GlobeIcon },
+  PASSBOOK: { label: 'Passbook', bg: 'var(--amber-soft)', color: 'var(--amber)', icon: BookIcon },
+  GRIEVANCE: { label: 'Grievance', bg: 'var(--green-soft)', color: 'var(--green)', icon: SendIcon },
+  BANK: { label: 'Bank Settlement', bg: 'var(--green-soft)', color: 'var(--green)', icon: CurrencyRupeeIcon },
 }
 
 function formatDate(dateStr: string): string {
@@ -82,17 +82,17 @@ export function ClaimTimeline({ claim }: { claim: ClaimRecord }) {
         marginTop: '3rem',
         padding: '2rem',
         borderRadius: '16px',
-        backgroundColor: '#ffffff',
-        border: '1px solid var(--line, #e2e8f0)',
+        backgroundColor: 'var(--paper-raised)',
+        border: '1px solid var(--line, var(--line))',
         boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.04)',
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '0.5rem' }}>
         <div>
-          <h2 style={{ fontSize: '1.35rem', fontWeight: 700, color: 'var(--ink, #0f172a)', margin: 0 }}>
+          <h2 style={{ fontSize: '1.35rem', fontWeight: 700, color: 'var(--ink, var(--ink))', margin: 0 }}>
             Audit Trail & Event History
           </h2>
-          <p style={{ color: 'var(--ink-soft, #64748b)', fontSize: '0.875rem', marginTop: '0.25rem' }}>
+          <p style={{ color: 'var(--ink-soft, var(--ink-3))', fontSize: '0.875rem', marginTop: '0.25rem' }}>
             Complete ledger of portal updates, ledger debits, and grievance submissions.
           </p>
         </div>
@@ -101,9 +101,9 @@ export function ClaimTimeline({ claim }: { claim: ClaimRecord }) {
             fontSize: '0.75rem',
             fontWeight: 700,
             padding: '0.25rem 0.65rem',
-            backgroundColor: '#f1f5f9',
+            backgroundColor: 'var(--paper)',
             borderRadius: '9999px',
-            color: '#475569',
+            color: 'var(--ink-2)',
           }}
         >
           {events.length} Events Recorded
@@ -111,8 +111,8 @@ export function ClaimTimeline({ claim }: { claim: ClaimRecord }) {
       </div>
 
       {events.length === 0 ? (
-        <div style={{ padding: '2rem', textAlign: 'center', backgroundColor: '#f8fafc', borderRadius: '12px', border: '1px dashed #cbd5e1' }}>
-          <p style={{ margin: 0, fontSize: '0.9rem', color: '#64748b' }}>No events recorded for this claim yet.</p>
+        <div style={{ padding: '2rem', textAlign: 'center', backgroundColor: 'var(--paper)', borderRadius: '12px', border: '1px dashed var(--line)' }}>
+          <p style={{ margin: 0, fontSize: '0.9rem', color: 'var(--ink-3)' }}>No events recorded for this claim yet.</p>
         </div>
       ) : (
         <div style={{ position: 'relative', paddingLeft: '0.5rem' }}>
@@ -139,7 +139,7 @@ export function ClaimTimeline({ claim }: { claim: ClaimRecord }) {
                       top: '32px',
                       bottom: 0,
                       width: '2px',
-                      backgroundColor: '#e2e8f0',
+                      backgroundColor: 'var(--line)',
                     }}
                   />
                 )}
@@ -156,7 +156,7 @@ export function ClaimTimeline({ claim }: { claim: ClaimRecord }) {
                     justifyContent: 'center',
                     fontSize: '1rem',
                     zIndex: 1,
-                    border: '2px solid #ffffff',
+                    border: '2px solid var(--paper-raised)',
                     boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
                   }}
                 >
@@ -169,8 +169,8 @@ export function ClaimTimeline({ claim }: { claim: ClaimRecord }) {
                     flex: 1,
                     padding: '0.85rem 1.15rem',
                     borderRadius: '12px',
-                    backgroundColor: '#f8fafc',
-                    border: '1px solid #f1f5f9',
+                    backgroundColor: 'var(--paper)',
+                    border: '1px solid var(--paper)',
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
@@ -187,16 +187,16 @@ export function ClaimTimeline({ claim }: { claim: ClaimRecord }) {
                       >
                         {cfg.label}
                       </span>
-                      <strong style={{ fontSize: '0.925rem', color: '#0f172a' }}>{e.what}</strong>
+                      <strong style={{ fontSize: '0.925rem', color: 'var(--ink)' }}>{e.what}</strong>
                     </div>
 
-                    <time style={{ fontSize: '0.8rem', fontFamily: 'monospace', color: '#64748b', fontWeight: 600 }}>
+                    <time style={{ fontSize: '0.8rem', fontFamily: 'monospace', color: 'var(--ink-3)', fontWeight: 600 }}>
                       {formatDate(e.at)}
                     </time>
                   </div>
 
                   {e.detail && (
-                    <p style={{ fontSize: '0.825rem', color: '#475569', marginTop: '0.35rem', margin: 0 }}>
+                    <p style={{ fontSize: '0.825rem', color: 'var(--ink-2)', marginTop: '0.35rem', margin: 0 }}>
                       {e.detail}
                     </p>
                   )}

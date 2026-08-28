@@ -159,9 +159,9 @@ export default function Demo() {
         without waiting 50 days.
       </p>
 
-      <p style={{ fontSize: '0.9rem', color: '#475569', marginBottom: '2rem' }}>
+      <p style={{ fontSize: '0.9rem', color: 'var(--ink-2)', marginBottom: '2rem' }}>
         These controls write shared state, so they need a session.{' '}
-        <a href="/" style={{ color: '#1e40af' }}>Sign in as one of the three people</a>{' '}
+        <a href="/" style={{ color: 'var(--green)' }}>Sign in as one of the three people</a>{' '}
         first, then come back.
       </p>
 
@@ -172,27 +172,27 @@ export default function Demo() {
             <div style={styles.cardHeader}>
               <div style={styles.claimBadge}>
                 <div>
-                  <strong style={{ fontSize: '1.05rem', fontWeight: 700, color: '#0f172a' }}>
+                  <strong style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--ink)' }}>
                     {WHO[id]?.name ?? id}
                   </strong>
-                  <div style={{ fontSize: '0.85rem', color: '#64748b' }}>{WHO[id]?.story}</div>
-                  <div style={{ fontSize: '0.75rem', color: '#94a3b8', fontFamily: 'monospace' }}>{id}</div>
+                  <div style={{ fontSize: '0.85rem', color: 'var(--ink-3)' }}>{WHO[id]?.story}</div>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--ink-3)', fontFamily: 'monospace' }}>{id}</div>
                 </div>
               </div>
               <span style={styles.liveIndicator}>Active Session</span>
             </div>
 
             {live[id] && (
-              <p style={{ margin: '0 0 0.9rem', fontSize: '0.9rem', color: '#475569' }}>
+              <p style={{ margin: '0 0 0.9rem', fontSize: '0.9rem', color: 'var(--ink-2)' }}>
                 <span style={{ fontVariantNumeric: 'tabular-nums' }}>
                   simulated date {live[id].today} ·{' '}
-                  <span style={{ color: live[id].breached ? '#a55f14' : '#475569', fontWeight: 600 }}>
+                  <span style={{ color: live[id].breached ? 'var(--amber)' : 'var(--ink-2)', fontWeight: 600 }}>
                     {live[id].daysElapsed} days
                     {live[id].breached ? `, ${live[id].overdueByDays} overdue` : ''}
                   </span>
                 </span>
                 <br />
-                <strong style={{ color: '#0f172a' }}>{live[id].action}</strong>
+                <strong style={{ color: 'var(--ink)' }}>{live[id].action}</strong>
               </p>
             )}
 
@@ -210,9 +210,9 @@ export default function Demo() {
                         padding: '0.2rem 0.5rem',
                         borderRadius: '4px',
                         border: '1px solid',
-                        borderColor: active ? '#a55f14' : done ? '#cbd5e1' : '#e2e8f0',
-                        background: active ? '#fdf3e7' : done ? '#f1f5f9' : 'transparent',
-                        color: active ? '#a55f14' : done ? '#475569' : '#94a3b8',
+                        borderColor: active ? 'var(--amber)' : done ? 'var(--line)' : 'var(--line)',
+                        background: active ? 'var(--amber-soft)' : done ? 'var(--paper)' : 'transparent',
+                        color: active ? 'var(--amber)' : done ? 'var(--ink-2)' : 'var(--ink-3)',
                       }}
                     >
                       {done ? 'done: ' : ''}{RUNG_LABEL[step]}{active ? ' (next)' : ''}
@@ -251,7 +251,7 @@ export default function Demo() {
               >
                 Reset
               </button>
-              <a href={`/claim/${id}`} style={{ alignSelf: 'center', color: '#1e40af', fontSize: '0.875rem' }}>
+              <a href={`/claim/${id}`} style={{ alignSelf: 'center', color: 'var(--green)', fontSize: '0.875rem' }}>
                 Open this claim
               </a>
             </div>
@@ -263,9 +263,9 @@ export default function Demo() {
       <section style={styles.terminalSection}>
         <div style={styles.terminalHeader}>
           <div style={styles.terminalDots}>
-            <span style={{ ...styles.dot, backgroundColor: '#ff5f56' }} />
-            <span style={{ ...styles.dot, backgroundColor: '#ffbd2e' }} />
-            <span style={{ ...styles.dot, backgroundColor: '#27c93f' }} />
+            <span style={{ ...styles.dot, backgroundColor: 'var(--crit)' }} />
+            <span style={{ ...styles.dot, backgroundColor: 'var(--amber)' }} />
+            <span style={{ ...styles.dot, backgroundColor: 'var(--green)' }} />
           </div>
           <span style={styles.terminalTitle}>Simulation Output Stream</span>
         </div>
@@ -299,14 +299,14 @@ const styles: Record<string, React.CSSProperties> = {
     margin: '0 auto',
     padding: '3rem 1.5rem 6rem 1.5rem',
     fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-    color: '#0f172a',
+    color: 'var(--ink)',
   },
   badgeContainer: {
     display: 'inline-flex',
     alignItems: 'center',
     gap: '0.5rem',
-    backgroundColor: '#eff6ff',
-    border: '1px solid #bfdbfe',
+    backgroundColor: 'var(--green-soft)',
+    border: '1px solid var(--green-soft)',
     padding: '0.35rem 0.85rem',
     borderRadius: '9999px',
     marginBottom: '1rem',
@@ -315,26 +315,26 @@ const styles: Record<string, React.CSSProperties> = {
     width: '8px',
     height: '8px',
     borderRadius: '50%',
-    backgroundColor: '#2563eb',
+    backgroundColor: 'var(--green)',
   },
   badgeText: {
     fontSize: '0.8rem',
     fontWeight: 700,
-    color: '#1e40af',
+    color: 'var(--green)',
     textTransform: 'uppercase',
     letterSpacing: '0.04em',
   },
   title: {
     fontSize: '2rem',
     fontWeight: 800,
-    color: '#0f172a',
+    color: 'var(--ink)',
     margin: '0 0 0.5rem 0',
     letterSpacing: '-0.02em',
   },
   description: {
     fontSize: '1rem',
     lineHeight: 1.6,
-    color: '#475569',
+    color: 'var(--ink-2)',
     maxWidth: '62ch',
     marginBottom: '2.5rem',
   },
@@ -345,8 +345,8 @@ const styles: Record<string, React.CSSProperties> = {
     marginBottom: '3rem',
   },
   card: {
-    backgroundColor: '#ffffff',
-    border: '1px solid #e2e8f0',
+    backgroundColor: 'var(--paper-raised)',
+    border: '1px solid var(--line)',
     borderRadius: '14px',
     padding: '1.25rem 1.5rem',
     boxShadow: '0 1px 3px rgba(0, 0, 0, 0.04)',
@@ -365,21 +365,21 @@ const styles: Record<string, React.CSSProperties> = {
   claimTag: {
     fontSize: '0.7rem',
     fontWeight: 700,
-    color: '#64748b',
-    backgroundColor: '#f1f5f9',
+    color: 'var(--ink-3)',
+    backgroundColor: 'var(--paper)',
     padding: '0.2rem 0.45rem',
     borderRadius: '4px',
   },
   claimIdText: {
     fontSize: '1.05rem',
     fontWeight: 700,
-    color: '#0f172a',
+    color: 'var(--ink)',
     fontFamily: 'monospace',
   },
   liveIndicator: {
     fontSize: '0.75rem',
     fontWeight: 600,
-    color: '#16a34a',
+    color: 'var(--green)',
   },
   buttonGroup: {
     display: 'flex',
@@ -387,9 +387,9 @@ const styles: Record<string, React.CSSProperties> = {
     flexWrap: 'wrap',
   },
   btnSecondary: {
-    backgroundColor: '#f8fafc',
-    border: '1px solid #cbd5e1',
-    color: '#334155',
+    backgroundColor: 'var(--paper)',
+    border: '1px solid var(--line)',
+    color: 'var(--ink-2)',
     padding: '0.55rem 1.1rem',
     borderRadius: '8px',
     fontSize: '0.875rem',
@@ -398,9 +398,9 @@ const styles: Record<string, React.CSSProperties> = {
     transition: 'all 0.15s ease',
   },
   btnSuccess: {
-    backgroundColor: '#15803d',
-    border: '1px solid #166534',
-    color: '#ffffff',
+    backgroundColor: 'var(--green)',
+    border: '1px solid var(--green)',
+    color: 'var(--paper-raised)',
     padding: '0.55rem 1.1rem',
     borderRadius: '8px',
     fontSize: '0.875rem',
@@ -410,18 +410,18 @@ const styles: Record<string, React.CSSProperties> = {
     marginLeft: 'auto',
   },
   terminalSection: {
-    backgroundColor: '#0f172a',
+    backgroundColor: 'var(--ink)',
     borderRadius: '14px',
     overflow: 'hidden',
     boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.25)',
   },
   terminalHeader: {
-    backgroundColor: '#1e293b',
+    backgroundColor: 'var(--ink)',
     padding: '0.75rem 1rem',
     display: 'flex',
     alignItems: 'center',
     gap: '1rem',
-    borderBottom: '1px solid #334155',
+    borderBottom: '1px solid var(--ink-2)',
   },
   terminalDots: {
     display: 'flex',
@@ -434,7 +434,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   terminalTitle: {
     fontSize: '0.8rem',
-    color: '#94a3b8',
+    color: 'var(--ink-3)',
     fontFamily: 'monospace',
     fontWeight: 600,
   },
@@ -447,7 +447,7 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: '0.875rem',
   },
   emptyLog: {
-    color: '#64748b',
+    color: 'var(--ink-3)',
     fontStyle: 'italic',
   },
   logList: {
@@ -464,14 +464,14 @@ const styles: Record<string, React.CSSProperties> = {
     alignItems: 'baseline',
   },
   logTime: {
-    color: '#64748b',
+    color: 'var(--ink-3)',
     fontSize: '0.8rem',
   },
   logText: {
-    color: '#38bdf8',
+    color: 'var(--green)',
   },
   logTextCredit: {
-    color: '#4ade80',
+    color: 'var(--green-soft)',
     fontWeight: 700,
   },
 }

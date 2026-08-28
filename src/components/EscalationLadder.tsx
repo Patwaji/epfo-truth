@@ -95,19 +95,19 @@ export function EscalationLadder({
         marginTop: '3.5rem',
         padding: '2rem',
         borderRadius: '16px',
-        backgroundColor: '#ffffff',
-        border: '1px solid var(--line, #e2e8f0)',
+        backgroundColor: 'var(--paper-raised)',
+        border: '1px solid var(--line, var(--line))',
         boxShadow: '0 10px 30px -5px rgba(0, 0, 0, 0.04)',
       }}
     >
       <div style={{ marginBottom: '2rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
           <span aria-hidden="true"><SendIcon size={20} /></span>
-          <h2 style={{ fontSize: '1.4rem', fontWeight: 700, color: 'var(--ink, #0f172a)', margin: 0 }}>
+          <h2 style={{ fontSize: '1.4rem', fontWeight: 700, color: 'var(--ink, var(--ink))', margin: 0 }}>
             Public Escalation Protocol
           </h2>
         </div>
-        <p style={{ color: 'var(--ink-soft, #64748b)', fontSize: '0.925rem', marginTop: '0.4rem', maxWidth: '65ch', lineHeight: 1.5 }}>
+        <p style={{ color: 'var(--ink-soft, var(--ink-3))', fontSize: '0.925rem', marginTop: '0.4rem', maxWidth: '65ch', lineHeight: 1.5 }}>
           This unaligned escalation pathway leverages statutory administrative oversight channels to force official resolution.
         </p>
       </div>
@@ -127,7 +127,7 @@ export function EscalationLadder({
                 position: 'relative',
                 paddingLeft: '2.25rem',
                 paddingBottom: isLast ? '0' : '2rem',
-                borderLeft: isLast ? '2px solid transparent' : isDone ? '2px solid #10b981' : '2px solid #e2e8f0',
+                borderLeft: isLast ? '2px solid transparent' : isDone ? '2px solid var(--green)' : '2px solid var(--line)',
                 transition: 'border-color 0.3s ease',
               }}
             >
@@ -145,9 +145,9 @@ export function EscalationLadder({
                   justifyContent: 'center',
                   fontSize: '0.65rem',
                   fontWeight: 700,
-                  backgroundColor: isDone ? '#10b981' : isNow ? '#2563eb' : '#f1f5f9',
-                  color: isDone || isNow ? '#ffffff' : '#94a3b8',
-                  border: isNow ? '3px solid #bfdbfe' : '2px solid #ffffff',
+                  backgroundColor: isDone ? 'var(--green)' : isNow ? 'var(--green)' : 'var(--paper)',
+                  color: isDone || isNow ? 'var(--paper-raised)' : 'var(--ink-3)',
+                  border: isNow ? '3px solid var(--green-soft)' : '2px solid var(--paper-raised)',
                   boxShadow: isNow ? '0 0 0 4px rgba(37, 99, 235, 0.15)' : 'none',
                 }}
               >
@@ -161,38 +161,38 @@ export function EscalationLadder({
                     style={{
                       fontSize: '1rem',
                       fontWeight: 700,
-                      color: isNow ? '#1e40af' : isDone ? '#065f46' : 'var(--ink, #334155)',
+                      color: isNow ? 'var(--green)' : isDone ? 'var(--green)' : 'var(--ink, var(--ink-2))',
                     }}
                   >
                     {LABEL[r]}
                   </span>
 
                   {isNow && (
-                    <span style={{ fontSize: '0.7rem', padding: '0.15rem 0.5rem', borderRadius: '9999px', backgroundColor: '#dbeafe', color: '#1e40af', fontWeight: 700 }}>
+                    <span style={{ fontSize: '0.7rem', padding: '0.15rem 0.5rem', borderRadius: '9999px', backgroundColor: 'var(--green-soft)', color: 'var(--green)', fontWeight: 700 }}>
                       ACTIVE STEP
                     </span>
                   )}
 
                   {isDone && (
-                    <span style={{ fontSize: '0.7rem', padding: '0.15rem 0.5rem', borderRadius: '9999px', backgroundColor: '#d1fae5', color: '#065f46', fontWeight: 600 }}>
+                    <span style={{ fontSize: '0.7rem', padding: '0.15rem 0.5rem', borderRadius: '9999px', backgroundColor: 'var(--green-soft)', color: 'var(--green)', fontWeight: 600 }}>
                       FILED
                     </span>
                   )}
 
                   {rec?.docket && (
-                    <span style={{ fontSize: '0.75rem', fontFamily: 'monospace', color: '#64748b', backgroundColor: '#f8fafc', padding: '0.1rem 0.4rem', borderRadius: '4px', border: '1px solid #e2e8f0' }}>
+                    <span style={{ fontSize: '0.75rem', fontFamily: 'monospace', color: 'var(--ink-3)', backgroundColor: 'var(--paper)', padding: '0.1rem 0.4rem', borderRadius: '4px', border: '1px solid var(--line)' }}>
                       Ref: {rec.docket}
                     </span>
                   )}
                 </div>
 
-                <p style={{ fontSize: '0.825rem', color: '#64748b', marginTop: '0.2rem', margin: 0 }}>
+                <p style={{ fontSize: '0.825rem', color: 'var(--ink-3)', marginTop: '0.2rem', margin: 0 }}>
                   {RUNG_DESCRIPTIONS[r]}
                 </p>
 
                 {rec?.closureText && (
-                  <div style={{ marginTop: '0.5rem', padding: '0.65rem 0.85rem', borderRadius: '8px', backgroundColor: '#fff7ed', borderLeft: '3px solid #f97316' }}>
-                    <p style={{ fontSize: '0.825rem', color: '#9a3412', margin: 0 }}>
+                  <div style={{ marginTop: '0.5rem', padding: '0.65rem 0.85rem', borderRadius: '8px', backgroundColor: 'var(--amber-soft)', borderLeft: '3px solid var(--amber)' }}>
+                    <p style={{ fontSize: '0.825rem', color: 'var(--amber)', margin: 0 }}>
                       <strong>Closure Note:</strong> “{rec.closureText}”. Unresolved, which is what opened the next step.
                     </p>
                   </div>
@@ -205,15 +205,15 @@ export function EscalationLadder({
                       marginTop: '1.25rem',
                       padding: '1.25rem',
                       borderRadius: '12px',
-                      backgroundColor: '#f8fafc',
-                      border: '1px solid #cbd5e1',
+                      backgroundColor: 'var(--paper)',
+                      border: '1px solid var(--line)',
                     }}
                   >
-                    <div style={{ fontSize: '0.8125rem', fontWeight: 600, color: '#475569', marginBottom: '0.35rem' }}>
-                      Recipient Channel: <span style={{ color: '#0f172a' }}>{draft.where}</span>
+                    <div style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--ink-2)', marginBottom: '0.35rem' }}>
+                      Recipient Channel: <span style={{ color: 'var(--ink)' }}>{draft.where}</span>
                     </div>
 
-                    <div style={{ fontSize: '0.9rem', fontWeight: 700, color: '#0f172a', marginBottom: '0.75rem' }}>
+                    <div style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.75rem' }}>
                       Subject: {draft.subject}
                     </div>
 
@@ -224,10 +224,10 @@ export function EscalationLadder({
                         fontFamily: 'monospace',
                         fontSize: '0.825rem',
                         padding: '1rem',
-                        backgroundColor: '#ffffff',
+                        backgroundColor: 'var(--paper-raised)',
                         borderRadius: '8px',
-                        border: '1px solid #e2e8f0',
-                        color: '#1e293b',
+                        border: '1px solid var(--line)',
+                        color: 'var(--ink)',
                         maxHeight: '220px',
                         overflowY: 'auto',
                         margin: 0,
@@ -237,7 +237,7 @@ export function EscalationLadder({
                     </pre>
 
                     {errorMessage && (
-                      <p style={{ color: '#dc2626', fontSize: '0.825rem', marginTop: '0.5rem' }}>
+                      <p style={{ color: 'var(--crit)', fontSize: '0.825rem', marginTop: '0.5rem' }}>
                         {errorMessage}
                       </p>
                     )}
@@ -249,9 +249,9 @@ export function EscalationLadder({
                         style={{
                           padding: '0.5rem 1rem',
                           borderRadius: '8px',
-                          border: '1px solid #cbd5e1',
-                          backgroundColor: '#ffffff',
-                          color: '#0f172a',
+                          border: '1px solid var(--line)',
+                          backgroundColor: 'var(--paper-raised)',
+                          color: 'var(--ink)',
                           fontWeight: 600,
                           fontSize: '0.85rem',
                           cursor: 'pointer',
@@ -268,8 +268,8 @@ export function EscalationLadder({
                           padding: '0.5rem 1.25rem',
                           borderRadius: '8px',
                           border: 'none',
-                          backgroundColor: '#2563eb',
-                          color: '#ffffff',
+                          backgroundColor: 'var(--green)',
+                          color: 'var(--paper-raised)',
                           fontWeight: 600,
                           fontSize: '0.85rem',
                           cursor: busy ? 'not-allowed' : 'pointer',

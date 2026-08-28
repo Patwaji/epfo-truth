@@ -11,20 +11,20 @@ const ROLE_CONFIG: Record<
 > = {
   YOU: {
     label: 'Action Required: You',
-    badgeBg: '#eff6ff',
-    badgeColor: '#1d4ed8',
+    badgeBg: 'var(--green-soft)',
+    badgeColor: 'var(--green)',
     icon: UserIcon,
   },
   EMPLOYER: {
     label: 'Action Required: Employer',
-    badgeBg: '#fff7ed',
-    badgeColor: '#c2410c',
+    badgeBg: 'var(--amber-soft)',
+    badgeColor: 'var(--amber)',
     icon: HomeIcon,
   },
   EPFO: {
     label: 'Action Required: EPFO Office',
-    badgeBg: '#fef2f2',
-    badgeColor: '#b91c1c',
+    badgeBg: 'var(--crit-soft)',
+    badgeColor: 'var(--crit)',
     icon: WalletIcon,
   },
 }
@@ -34,8 +34,8 @@ export function BlockerPanel({ blocker }: { blocker: Blocker }) {
 
   const role = ROLE_CONFIG[blocker.whoFixesIt] || {
     label: 'Action Required',
-    badgeBg: '#f3f4f6',
-    badgeColor: '#374151',
+    badgeBg: 'var(--paper)',
+    badgeColor: 'var(--ink-2)',
     icon: TriangleAlertIcon,
   }
 
@@ -46,8 +46,8 @@ export function BlockerPanel({ blocker }: { blocker: Blocker }) {
         marginTop: '2.5rem',
         padding: '1.75rem',
         borderRadius: '16px',
-        border: '1px solid var(--line, #e2e8f0)',
-        backgroundColor: 'var(--paper, #ffffff)',
+        border: '1px solid var(--line, var(--line))',
+        backgroundColor: 'var(--paper, var(--paper-raised))',
         boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01)',
         position: 'relative',
         overflow: 'hidden',
@@ -89,11 +89,11 @@ export function BlockerPanel({ blocker }: { blocker: Blocker }) {
           style={{
             fontSize: '0.75rem',
             fontFamily: 'monospace',
-            color: 'var(--ink-soft, #64748b)',
-            backgroundColor: '#f8fafc',
+            color: 'var(--ink-soft, var(--ink-3))',
+            backgroundColor: 'var(--paper)',
             padding: '0.2rem 0.5rem',
             borderRadius: '4px',
-            border: '1px solid #e2e8f0',
+            border: '1px solid var(--line)',
           }}
         >
           CODE: {blocker.code}
@@ -106,7 +106,7 @@ export function BlockerPanel({ blocker }: { blocker: Blocker }) {
           style={{
             fontSize: '1.35rem',
             fontWeight: 700,
-            color: 'var(--ink, #0f172a)',
+            color: 'var(--ink, var(--ink))',
             lineHeight: 1.3,
             margin: 0,
           }}
@@ -117,7 +117,7 @@ export function BlockerPanel({ blocker }: { blocker: Blocker }) {
           style={{
             marginTop: '0.6rem',
             fontSize: '0.95rem',
-            color: 'var(--ink-soft, #475569)',
+            color: 'var(--ink-soft, var(--ink-2))',
             lineHeight: 1.6,
             maxWidth: '65ch',
           }}
@@ -128,13 +128,13 @@ export function BlockerPanel({ blocker }: { blocker: Blocker }) {
 
       {/* Step-by-Step Resolution Path */}
       {blocker.fixSteps && blocker.fixSteps.length > 0 && (
-        <div style={{ marginTop: '1.75rem', borderTop: '1px dashed var(--line, #e2e8f0)', paddingTop: '1.25rem' }}>
+        <div style={{ marginTop: '1.75rem', borderTop: '1px dashed var(--line, var(--line))', paddingTop: '1.25rem' }}>
           <h4
             style={{
               fontSize: '0.8125rem',
               textTransform: 'uppercase',
               letterSpacing: '0.05em',
-              color: 'var(--ink-soft, #64748b)',
+              color: 'var(--ink-soft, var(--ink-3))',
               fontWeight: 700,
               marginBottom: '1rem',
             }}
@@ -152,8 +152,8 @@ export function BlockerPanel({ blocker }: { blocker: Blocker }) {
                   gap: '0.85rem',
                   padding: '0.75rem 1rem',
                   borderRadius: '10px',
-                  backgroundColor: '#f8fafc',
-                  border: '1px solid #f1f5f9',
+                  backgroundColor: 'var(--paper)',
+                  border: '1px solid var(--paper)',
                 }}
               >
                 <span
@@ -164,8 +164,8 @@ export function BlockerPanel({ blocker }: { blocker: Blocker }) {
                     minWidth: '24px',
                     height: '24px',
                     borderRadius: '50%',
-                    backgroundColor: 'var(--ink, #0f172a)',
-                    color: '#ffffff',
+                    backgroundColor: 'var(--ink, var(--ink))',
+                    color: 'var(--paper-raised)',
                     fontSize: '0.75rem',
                     fontWeight: 700,
                   }}
@@ -175,7 +175,7 @@ export function BlockerPanel({ blocker }: { blocker: Blocker }) {
                 <span
                   style={{
                     fontSize: '0.9rem',
-                    color: 'var(--ink, #1e293b)',
+                    color: 'var(--ink, var(--ink))',
                     lineHeight: 1.5,
                     paddingTop: '0.1rem',
                   }}
