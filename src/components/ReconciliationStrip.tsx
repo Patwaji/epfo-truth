@@ -11,7 +11,7 @@
  */
 export function ReconciliationStrip() {
   return (
-    <figure style={{ margin: '2.5rem 0 0', maxWidth: 640 }} aria-labelledby="strip-caption">
+    <figure style={{ margin: 'clamp(2rem, 5vw, 3.25rem) 0 0', maxWidth: 860 }} aria-labelledby="strip-caption">
       <svg
         viewBox="0 0 640 300"
         width="100%"
@@ -22,9 +22,9 @@ export function ReconciliationStrip() {
       >
         <defs>
           <style>{`
-            .rs-src   { font: 600 12.5px var(--font-body); fill: var(--ink-3); letter-spacing: .04em; }
-            .rs-val   { font: 700 16px var(--font-body);   fill: var(--ink); }
-            .rs-miss  { font: 700 16px var(--font-body);   fill: var(--crit); }
+            .rs-src   { font: 600 13.5px var(--font-body); fill: var(--ink-3); letter-spacing: .04em; }
+            .rs-val   { font: 700 19px var(--font-body);   fill: var(--ink); }
+            .rs-miss  { font: 700 19px var(--font-body);   fill: var(--crit); }
             .rs-note  { font: 500 12px var(--font-body);   fill: var(--crit); }
             .rs-rail  { stroke: var(--line); stroke-width: 1.5; }
             .rs-path  { stroke: var(--amber); stroke-width: 2; stroke-linecap: round; }

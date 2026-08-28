@@ -93,9 +93,9 @@ export default function Home() {
 
 const styles: Record<string, React.CSSProperties> = {
   container: {
-    maxWidth: '920px',
+    maxWidth: '1040px',
     margin: '0 auto',
-    padding: '3rem 1.5rem 5rem 1.5rem',
+    padding: 'clamp(2rem, 6vw, 4.5rem) 1.5rem 5rem 1.5rem',
     fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
     color: 'var(--ink)',
   },
@@ -125,10 +125,10 @@ const styles: Record<string, React.CSSProperties> = {
     marginBottom: '3.5rem',
   },
   mainHeading: {
-    fontSize: 'clamp(2rem, 5.2vw, 3.25rem)',
-    lineHeight: 1.15,
+    fontSize: 'clamp(2.1rem, 5.6vw, 3.7rem)',
+    lineHeight: 1.06,
     fontWeight: 800,
-    letterSpacing: '-0.02em',
+    letterSpacing: '-0.03em',
     color: 'var(--ink)',
     margin: 0,
   },
@@ -139,8 +139,8 @@ const styles: Record<string, React.CSSProperties> = {
   },
   description: {
     marginTop: '1.75rem',
-    maxWidth: '62ch',
-    fontSize: '1.125rem',
+    maxWidth: '54ch',
+    fontSize: '1.05rem',
     lineHeight: 1.6,
     color: 'var(--ink-2)',
     fontWeight: 400,
@@ -153,7 +153,7 @@ const styles: Record<string, React.CSSProperties> = {
     marginBottom: '1.75rem',
   },
   sectionTitle: {
-    fontSize: '1.35rem',
+    fontSize: '1.6rem',
     fontWeight: 700,
     color: 'var(--ink)',
     margin: 0,
@@ -186,7 +186,7 @@ const styles: Record<string, React.CSSProperties> = {
     backgroundColor: 'var(--paper-raised)',
     border: '1px solid var(--line)',
     borderRadius: '12px',
-    padding: '1.25rem 1.5rem',
+    padding: '1.6rem 1.75rem',
     boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
   },
   cardHeader: {
@@ -210,11 +210,11 @@ const styles: Record<string, React.CSSProperties> = {
     fontFamily: 'monospace',
   },
   cardLabel: {
-    fontSize: '1.15rem',
+    fontSize: '1.32rem',
     fontWeight: 600,
     color: 'var(--ink)',
     margin: '0 0 0.75rem 0',
-    lineHeight: 1.35,
+    lineHeight: 1.28,
   },
   cardFooter: {
     display: 'flex',
