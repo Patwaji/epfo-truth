@@ -1,8 +1,28 @@
 'use client'
 
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 const CLAIMS = ['CLM-2026-070301', 'CLM-2026-061502', 'CLM-2026-060103']
+
+const WHO: Record<string, { name: string; story: string }> = {
+  'CLM-2026-070301': { name: 'Rajesh Kumar', story: 'Passbook debited, bank empty, status went backwards.' },
+  'CLM-2026-061502': { name: 'Sunita Devi', story: 'Auto-rejected on a one-letter name mismatch.' },
+  'CLM-2026-060103': { name: 'Imran Shaikh', story: 'Transfer blocked by a wrong pension flag.' },
+}
+
+// The ladder, in the order it unlocks. Shown so the point of moving the clock
+// is visible: each breach opens the next channel.
+const LADDER = ['EPFIGMS', 'CPGRAMS', 'REGIONAL_EMAIL', 'CPGRAMS_APPEAL', 'DPG', 'RTI'] as const
+
+const RUNG_LABEL: Record<string, string> = {
+  WAIT: 'Waiting',
+  EPFIGMS: 'EPFiGMS',
+  CPGRAMS: 'CPGRAMS',
+  REGIONAL_EMAIL: 'Regional office email',
+  CPGRAMS_APPEAL: 'CPGRAMS appeal',
+  DPG: 'DPG',
+  RTI: 'RTI',
+}
 
 interface LogEntry {
   id: string
@@ -11,9 +31,73 @@ interface LogEntry {
   type: 'advance' | 'credit'
 }
 
+interface LiveState {
+  today: string
+  daysElapsed: number
+  overdueByDays: number
+  breached: boolean
+  action: string
+  rung: string
+  truth: string
+  filed: string[]
+}
+
 export default function Demo() {
   const [log, setLog] = useState<LogEntry[]>([])
   const [loadingId, setLoadingId] = useState<string | null>(null)
+  const [live, setLive] = useState<Record<string, LiveState>>({})
+
+  const refresh = useCallback(async () => {
+    const rows = await Promise.all(
+      CLAIMS.map(async (id) => {
+        try {
+          const res = await fetch(`/api/claims/${id}`, { cache: 'no-store' })
+          if (!res.ok) return [id, null] as const
+          const d = await res.json()
+          return [id, {
+            today: d.today,
+            daysElapsed: d.sla.daysElapsed,
+            overdueByDays: d.sla.overdueByDays,
+            breached: d.sla.breached,
+            action: d.action.headline,
+            rung: d.rung,
+            truth: d.truth.code,
+            filed: (d.claim.grievances ?? []).map((g: { channel: string }) => g.channel),
+          }] as const
+        } catch {
+          return [id, null] as const
+        }
+      }),
+    )
+    const next: Record<string, LiveState> = {}
+    for (const [id, v] of rows) if (v) next[id] = v
+    setLive(next)
+  }, [])
+
+  useEffect(() => { void refresh() }, [refresh])
+
+  // Rewinding to the filing date is how you get a clean slate between judges
+  // without reseeding the database.
+  async function reset(id: string) {
+    setLoadingId(`${id}-reset`)
+    try {
+      const res = await fetch(`/api/claims/${id}/simulate`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ reset: true }),
+      })
+      const json = await res.json()
+      setLog((prev) => [{
+        id: Math.random().toString(36).slice(2, 11),
+        text: `${id}: reset to the filing date, now ${json.today}`,
+        time: new Date().toLocaleTimeString('en-US', { hour12: false }),
+        type: 'advance',
+      }, ...prev])
+      await refresh()
+    } finally {
+      setLoadingId(null)
+    }
+  }
 
   async function advance(id: string, days: number, creditNow = false) {
     const actionKey = `${id}-${days}-${creditNow}`
@@ -42,6 +126,7 @@ export default function Demo() {
       }
 
       setLog(prev => [newEntry, ...prev])
+      await refresh()
     } catch (err) {
       console.error('Simulation failed:', err)
     } finally {
@@ -70,11 +155,56 @@ export default function Demo() {
           <section key={id} style={styles.card}>
             <div style={styles.cardHeader}>
               <div style={styles.claimBadge}>
-                <span style={styles.claimTag}>CLAIM ID</span>
-                <strong style={styles.claimIdText}>{id}</strong>
+                <div>
+                  <strong style={{ fontSize: '1.05rem', fontWeight: 700, color: '#0f172a' }}>
+                    {WHO[id]?.name ?? id}
+                  </strong>
+                  <div style={{ fontSize: '0.85rem', color: '#64748b' }}>{WHO[id]?.story}</div>
+                  <div style={{ fontSize: '0.75rem', color: '#94a3b8', fontFamily: 'monospace' }}>{id}</div>
+                </div>
               </div>
               <span style={styles.liveIndicator}>Active Session</span>
             </div>
+
+            {live[id] && (
+              <p style={{ margin: '0 0 0.9rem', fontSize: '0.9rem', color: '#475569' }}>
+                <span style={{ fontVariantNumeric: 'tabular-nums' }}>
+                  simulated date {live[id].today} ·{' '}
+                  <span style={{ color: live[id].breached ? '#a55f14' : '#475569', fontWeight: 600 }}>
+                    {live[id].daysElapsed} days
+                    {live[id].breached ? `, ${live[id].overdueByDays} overdue` : ''}
+                  </span>
+                </span>
+                <br />
+                <strong style={{ color: '#0f172a' }}>{live[id].action}</strong>
+              </p>
+            )}
+
+            {live[id] && (
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginBottom: '1rem' }}>
+                {LADDER.map((step) => {
+                  const done = live[id].filed.includes(step)
+                  const active = live[id].rung === step
+                  return (
+                    <span
+                      key={step}
+                      style={{
+                        fontSize: '0.72rem',
+                        fontWeight: 600,
+                        padding: '0.2rem 0.5rem',
+                        borderRadius: '4px',
+                        border: '1px solid',
+                        borderColor: active ? '#a55f14' : done ? '#cbd5e1' : '#e2e8f0',
+                        background: active ? '#fdf3e7' : done ? '#f1f5f9' : 'transparent',
+                        color: active ? '#a55f14' : done ? '#475569' : '#94a3b8',
+                      }}
+                    >
+                      {done ? '✓ ' : ''}{RUNG_LABEL[step]}{active ? ' ← next' : ''}
+                    </span>
+                  )
+                })}
+              </div>
+            )}
 
             <div style={styles.buttonGroup}>
               <button
@@ -98,6 +228,16 @@ export default function Demo() {
               >
                 💳 Credit Money
               </button>
+              <button
+                disabled={loadingId !== null}
+                onClick={() => reset(id)}
+                style={styles.btnSecondary}
+              >
+                Reset
+              </button>
+              <a href={`/claim/${id}`} style={{ alignSelf: 'center', color: '#1e40af', fontSize: '0.875rem' }}>
+                Open this claim
+              </a>
             </div>
           </section>
         ))}
