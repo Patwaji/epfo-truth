@@ -67,6 +67,10 @@
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
+    --hero-bg: #14110f;
+    --hero-fg: #f7f5f2;
+    --hero-dim: rgba(247, 245, 242, 0.66);
+    --hero-rail: rgba(247, 245, 242, 0.26);
     --ink: #efe9e1;
     --ink-2: #b3aaa0;
     --ink-3: #9d948a;
@@ -84,6 +88,10 @@
 }
 
 :root[data-theme="dark"] {
+  --hero-bg: #14110f;
+  --hero-fg: #f7f5f2;
+  --hero-dim: rgba(247, 245, 242, 0.66);
+  --hero-rail: rgba(247, 245, 242, 0.26);
   --ink: #efe9e1;
   --ink-2: #b3aaa0;
   --ink-3: #9d948a;
@@ -247,17 +255,23 @@ td.num {
 :root {
   --pop-edge: 2px;
 
-  /* The hero is a dark surface in both themes, so it cannot use --ink, which
-     flips to cream in dark mode and paints light text on a light ground. */
-  --hero-bg: #14110f;
-  --hero-fg: #f7f5f2;
-  --hero-dim: rgba(247, 245, 242, 0.62);
-  --hero-rail: rgba(247, 245, 242, 0.26);
+  /* The hero band follows the chosen theme. Light means light. */
+  --hero-bg: #efeae3;
+  --hero-fg: #1a1613;
+  --hero-dim: #5b544d;
+  --hero-rail: rgba(26, 22, 19, 0.22);
   --ink-invert: var(--hero-fg);
 }
 
-/* The signal colour. Hotter than the document amber because it sits on ink. */
-:root { --signal: #ff8a3d; }
+/* The signal colour, per theme. The hot orange only clears AA on ink; on a
+   light ground it measures about 2:1, so light gets a burnt version of the
+   same hue. */
+:root { --signal: #a84706; }
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --signal: #ff8a3d; }
+}
+:root[data-theme="dark"] { --signal: #ff8a3d; }
 
 .pop {
   border: var(--pop-edge) solid var(--ink);
@@ -279,5 +293,12 @@ td.num {
 /* Inside the dark hero the edges have to be light to be seen at all. */
 .on-ink .pop,
 .on-ink .pop-press { border-color: var(--hero-fg); box-shadow: 6px 6px 0 var(--signal); }
+
+/* Sharp corners are the language, so nothing anywhere is rounded. */
+*,
+*::before,
+*::after {
+  border-radius: 0 !important;
+}
 
 .kicker { letter-spacing: 0.16em; }

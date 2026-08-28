@@ -158,7 +158,7 @@ const s: Record<string, React.CSSProperties> = {
   stripWrap: { marginTop: 'clamp(2.5rem, 6vw, 4.5rem)', maxWidth: 980 },
 
   stats: {
-    background: 'var(--signal)',
+    background: '#ff8a3d',
     color: '#1a1613',
     padding: 'clamp(1.5rem, 4vw, 2.25rem) var(--pad-page)',
   },
