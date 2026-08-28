@@ -25,47 +25,42 @@ export default async function ClaimPage({
   return (
     <main
       style={{
-        maxWidth: '920px',
-        margin: '0 auto',
-        padding: '2.5rem 1.25rem 5rem 1.25rem',
+        maxWidth: 'none',
+        margin: 0,
+        padding: '0 0 5rem',
         fontFamily: 'system-ui, -apple-system, sans-serif',
       }}
     >
       {/* Top Banner & Metadata */}
-      <header
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          paddingBottom: '1.25rem',
-          marginBottom: '2rem',
-          borderBottom: '1px solid var(--line, var(--line))',
-          flexWrap: 'wrap',
-          gap: '0.75rem',
-        }}
-      >
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <span style={{ fontSize: '0.75rem', padding: '0.2rem 0.5rem', borderRadius: '4px', backgroundColor: 'var(--ink)', color: 'var(--paper-raised)', fontWeight: 700 }}>
-              EPFO TRUTH LAYER
-            </span>
-            <span style={{ fontSize: '0.85rem', color: 'var(--ink-3)' }}>• Ref: {d.claim.id}</span>
-          </div>
-          <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--ink)', marginTop: '0.4rem', margin: 0 }}>
-            Claim Audit & Escalation Portal
-          </h1>
-        </div>
+      {/* The claim opens on the same ink band as the home page, so the two
+          screens read as one product rather than two. */}
+      <header className="on-ink" style={hero}>
+        <div style={heroInner}>
+          <p style={heroEyebrow}>
+            EPFO TRUTH ENGINE
+            <span style={{ color: 'var(--hero-dim)' }}> &middot; REF {d.claim.id}</span>
+          </p>
 
-        <div style={{ textAlign: 'right' }}>
-          <span style={{ fontSize: '0.75rem', color: 'var(--ink-3)', display: 'block' }}>System Timestamp</span>
-          <strong style={{ fontSize: '0.85rem', fontFamily: 'monospace', color: 'var(--ink-2)' }}>
-            {d.today ? new Date(d.today).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : 'Live'}
-          </strong>
+          <h1 style={heroTitle}>
+            {d.action.headline}
+          </h1>
+
+          <p style={heroSub}>{d.action.detail}</p>
+
+          <div style={heroMeta}>
+            <span className="num" style={heroFig}>
+              &#8377;{(d.claim.amountPaise / 100).toLocaleString('en-IN')}
+            </span>
+            <span className="num" style={heroDays}>
+              {d.sla.daysElapsed} days since filed
+              {d.sla.breached ? `, ${d.sla.overdueByDays} past EPFO's own ${d.sla.slaDays}-day limit` : ''}
+            </span>
+          </div>
         </div>
       </header>
 
       {/* Main Sections */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', minWidth: 0 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', minWidth: 0, maxWidth: 920, margin: '0 auto', padding: '0 var(--pad-page)' }}>
         <TruthCard
           truth={d.truth}
           sla={d.sla}
@@ -95,3 +90,59 @@ export default async function ClaimPage({
     </main>
   )
 }
+
+const hero: React.CSSProperties = {
+  background: 'var(--hero-bg)',
+  color: 'var(--hero-fg)',
+  padding: 'clamp(2.25rem, 6vw, 4rem) var(--pad-page) clamp(2rem, 5vw, 3rem)',
+  marginBottom: 'clamp(2rem, 5vw, 3rem)',
+  display: 'block',
+}
+
+const heroInner: React.CSSProperties = { maxWidth: 920, margin: '0 auto' }
+
+const heroEyebrow: React.CSSProperties = {
+  fontSize: '0.72rem',
+  letterSpacing: '0.18em',
+  fontWeight: 700,
+  color: 'var(--signal)',
+  margin: '0 0 1.25rem',
+}
+
+const heroTitle: React.CSSProperties = {
+  fontFamily: 'var(--font-display)',
+  fontSize: 'clamp(1.9rem, 4.2vw, 3.1rem)',
+  lineHeight: 1.02,
+  letterSpacing: '-0.035em',
+  fontWeight: 700,
+  color: 'var(--hero-fg)',
+  margin: 0,
+  maxWidth: '20ch',
+}
+
+const heroSub: React.CSSProperties = {
+  color: 'var(--hero-dim)',
+  margin: '1rem 0 0',
+  maxWidth: '54ch',
+  fontSize: '1.02rem',
+}
+
+const heroMeta: React.CSSProperties = {
+  display: 'flex',
+  flexWrap: 'wrap',
+  alignItems: 'baseline',
+  gap: '0.4rem 1.5rem',
+  marginTop: 'clamp(1.5rem, 4vw, 2.25rem)',
+  paddingTop: '1.25rem',
+  borderTop: '1px solid var(--hero-rail)',
+}
+
+const heroFig: React.CSSProperties = {
+  fontFamily: 'var(--font-display)',
+  fontSize: 'clamp(1.8rem, 3.4vw, 2.6rem)',
+  fontWeight: 700,
+  letterSpacing: '-0.03em',
+  color: 'var(--hero-fg)',
+}
+
+const heroDays: React.CSSProperties = { color: 'var(--signal)', fontWeight: 600 }

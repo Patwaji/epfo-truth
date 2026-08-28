@@ -93,7 +93,8 @@ export default function Home() {
       <PortalWall />
 
       {/* ---- Pick a person ---- */}
-      <section style={s.picker}>
+      <section className="on-ink" style={s.picker}>
+        <div style={s.pickerInner}>
         <div style={s.pickerHead}>
           <h2 style={s.h2}>pick someone and see it</h2>
           <p style={s.otp}>
@@ -120,6 +121,7 @@ export default function Home() {
               </article>
             </Link>
           ))}
+        </div>
         </div>
       </section>
     </main>
@@ -186,7 +188,12 @@ const s: Record<string, React.CSSProperties> = {
     color: 'var(--ink-2)',
   },
 
-  picker: { padding: 'clamp(2.5rem, 6vw, 4rem) var(--pad-page) clamp(3rem, 7vw, 5rem)', maxWidth: 1140, margin: '0 auto' },
+  picker: {
+    background: 'var(--hero-bg)',
+    color: 'var(--hero-fg)',
+    padding: 'clamp(3rem, 7vw, 5rem) var(--pad-page) clamp(3.5rem, 8vw, 6rem)',
+  },
+  pickerInner: { maxWidth: 1140, margin: '0 auto' },
   pickerHead: { marginBottom: 'clamp(1.5rem, 4vw, 2.5rem)' },
   h2: {
     fontFamily: 'var(--font-display)',
@@ -209,6 +216,7 @@ const s: Record<string, React.CSSProperties> = {
   },
   cardLink: { textDecoration: 'none', color: 'inherit', display: 'block' },
   card: {
+    color: 'var(--ink)',
     padding: 'clamp(1.4rem, 3vw, 1.9rem)',
     display: 'flex',
     flexDirection: 'column',
@@ -247,5 +255,5 @@ const s: Record<string, React.CSSProperties> = {
     borderTop: '1px solid var(--line)',
   },
   who: { fontSize: '0.88rem', color: 'var(--ink-3)' },
-  arrow: { fontSize: '1.15rem', color: 'var(--ink)' },
+  arrow: { fontSize: '1.15rem', color: 'var(--amber)' },
 }
