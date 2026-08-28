@@ -230,3 +230,70 @@ td.num {
   white-space: nowrap;
   border: 0;
 }
+
+/* ---------------------------------------------------------------------------
+   NeoPOP layer
+
+   Direction taken from what Indian money apps actually ship for a young
+   audience: CRED and Zerodha both render every button and card at zero radius,
+   with hard edges and flat blocks of colour. No soft shadows, no rounded
+   pills, no glow. Depth comes from a hard offset shadow, the way a printed
+   card sits on a surface.
+
+   Applied as a layer over the existing components so the whole app changes
+   language at once, rather than editing 250 inline styles by hand with an
+   hour on the clock.
+--------------------------------------------------------------------------- */
+
+:root {
+  --pop-edge: 2px;
+  --pop-shadow: 5px 5px 0 var(--ink);
+  --pop-shadow-sm: 3px 3px 0 var(--ink);
+}
+
+/* Nothing is rounded. This single rule does most of the work. */
+main *,
+footer *,
+main,
+button,
+input,
+a,
+section,
+article,
+figure {
+  border-radius: 0 !important;
+}
+
+/* Cards and panels sit on the page as physical objects. */
+main section,
+main article,
+main form {
+  box-shadow: var(--pop-shadow);
+  border: var(--pop-edge) solid var(--ink) !important;
+}
+
+/* Controls get the same treatment, and press in rather than lifting. */
+main button,
+main a[href] > article,
+footer button {
+  border: var(--pop-edge) solid var(--ink) !important;
+  box-shadow: var(--pop-shadow-sm);
+  transition: transform 0.06s steps(1), box-shadow 0.06s steps(1);
+}
+
+main button:active,
+footer button:active {
+  transform: translate(3px, 3px);
+  box-shadow: none;
+}
+
+/* Micro labels are set as hard, tracked capitals. */
+.kicker {
+  letter-spacing: 0.16em;
+}
+
+/* The display face carries the page, so let it get properly large and tight. */
+h1 {
+  letter-spacing: -0.035em;
+  line-height: 1.02;
+}
