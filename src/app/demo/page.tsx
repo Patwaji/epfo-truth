@@ -434,7 +434,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   terminalTitle: {
     fontSize: '0.8rem',
-    color: 'var(--ink-3)',
+    color: 'var(--paper)',
     fontFamily: 'monospace',
     fontWeight: 600,
   },
@@ -447,7 +447,7 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: '0.875rem',
   },
   emptyLog: {
-    color: 'var(--ink-3)',
+    color: 'var(--paper)',
     fontStyle: 'italic',
   },
   logList: {
