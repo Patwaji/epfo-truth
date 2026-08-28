@@ -50,6 +50,18 @@ export default async function Dashboard() {
         <div style={styles.headerRight}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
             <span style={styles.statusChip}>KYC Verified</span>
+            <Link
+              href="/file"
+              style={{
+                fontSize: '0.85rem',
+                fontWeight: 600,
+                color: '#145a4e',
+                textDecoration: 'underline',
+                textUnderlineOffset: '3px',
+              }}
+            >
+              Check a claim before filing
+            </Link>
             <SignOut />
           </div>
         </div>
