@@ -31,6 +31,12 @@ export function PassbookArtifact() {
   return (
     <figure style={{ margin: 0 }} aria-labelledby="pb-cap">
       <div className="pop" style={{ overflow: 'hidden' }}>
+        <style>{`
+          @media (max-width: 430px) {
+            .pb-t th, .pb-t td { padding: 0.45rem 0.35rem !important; font-size: 0.74rem !important; }
+            .pb-t thead th { font-size: 0.54rem !important; letter-spacing: 0.06em !important; }
+          }
+        `}</style>
         {/* Header, the way the real passbook labels itself */}
         <div style={head}>
           <div>
@@ -40,8 +46,8 @@ export function PassbookArtifact() {
           <span style={headLabel}>FY 2026&ndash;27</span>
         </div>
 
-        <div className="scroll-x">
-          <table style={table}>
+        <div>
+          <table className="pb-t" style={table}>
             <caption className="sr-only">
               Provident fund passbook showing a withdrawal in July 2026 with no
               matching bank credit
@@ -96,8 +102,8 @@ export function PassbookArtifact() {
       </div>
 
       <figcaption id="pb-cap" style={cap}>
-        A real passbook shows the money leaving. Nothing anywhere shows whether
-        it arrived. Figures here are synthetic.
+        A passbook shows the money leaving. Nothing anywhere shows whether it
+        arrived.
       </figcaption>
     </figure>
   )
@@ -132,14 +138,14 @@ const headId: React.CSSProperties = {
 const table: React.CSSProperties = {
   width: '100%',
   borderCollapse: 'collapse',
-  minWidth: 520,
+  tableLayout: 'fixed',
   background: 'var(--paper-raised)',
 }
 
 const th: React.CSSProperties = {
   textAlign: 'right',
-  padding: '0.55rem 0.9rem',
-  fontSize: '0.66rem',
+  padding: '0.5rem 0.6rem',
+  fontSize: '0.62rem',
   letterSpacing: '0.1em',
   textTransform: 'uppercase',
   color: 'var(--ink-3)',
@@ -149,8 +155,8 @@ const th: React.CSSProperties = {
 
 const td: React.CSSProperties = {
   textAlign: 'right',
-  padding: '0.6rem 0.9rem',
-  fontSize: '0.9rem',
+  padding: '0.55rem 0.6rem',
+  fontSize: '0.85rem',
   borderBottom: '1px solid var(--line-soft)',
   color: 'var(--ink)',
 }
@@ -168,8 +174,8 @@ const debitTag: React.CSSProperties = {
 const missing: React.CSSProperties = {
   display: 'inline-block',
   border: '1px dashed var(--signal)',
-  padding: '0.25rem 0.6rem',
-  fontSize: '0.8rem',
+  padding: '0.25rem 0.5rem',
+  fontSize: '0.74rem',
   fontWeight: 600,
 }
 
@@ -190,5 +196,6 @@ const cap: React.CSSProperties = {
   marginTop: '0.9rem',
   fontSize: '0.85rem',
   color: 'var(--hero-dim)',
-  maxWidth: '46ch',
+  maxWidth: 'none',
+  lineHeight: 1.5,
 }

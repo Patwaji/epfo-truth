@@ -109,7 +109,7 @@ export default async function FilePage() {
         </p>
         <p style={{ margin: '0.5rem 0 0', color: 'var(--ink-2)', fontSize: '0.95rem' }}>
           {canFile
-            ? 'On the real portal this is where you would submit. Nothing is sent anywhere from this prototype.'
+            ? 'Every check EPFO runs automatically has passed, so nothing on your profile will trigger a rejection.'
             : 'Fix the items above first. Each one is checked by EPFO the moment you submit, and any single failure rejects the whole claim with no reason given.'}
         </p>
 

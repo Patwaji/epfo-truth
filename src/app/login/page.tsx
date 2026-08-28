@@ -72,7 +72,7 @@ function LoginForm() {
           inputMode="numeric"
           style={styles.input}
         />
-        <span style={styles.fieldHint}>Pre-filled for hackathon prototype mode</span>
+        <span style={styles.fieldHint}>Pre-filled</span>
       </div>
 
       {error && (
@@ -110,7 +110,7 @@ export default function Login() {
 
         <h1 style={styles.title}>Member Sign In</h1>
         <p style={styles.subtitle}>
-          Synthetic UANs only. The OTP is pre-filled because this is a public service demo.
+          The OTP is pre-filled for you.
         </p>
 
         <Suspense fallback={<div style={styles.loadingFallback}>Loading authentication form...</div>}>

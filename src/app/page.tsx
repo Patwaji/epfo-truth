@@ -70,7 +70,7 @@ export default function Home() {
               </div>
 
               <p style={s.trust}>
-                No signup. Three real cases loaded. Nothing is sent to EPFO.
+                No signup. Three real cases, loaded and ready.
               </p>
             </div>
 

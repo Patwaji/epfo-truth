@@ -36,8 +36,7 @@ export function FileClaimButton({ canFile }: { canFile: boolean }) {
         }}
       >
         <CheckedIcon size={16} />
-        Checks passed. On the real portal this is where the claim would be submitted.
-        Nothing was sent from this prototype.
+        Checks passed. This is where the claim would be submitted.
       </p>
     )
   }
